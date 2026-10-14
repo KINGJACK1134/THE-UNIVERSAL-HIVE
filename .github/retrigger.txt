@@ -1,0 +1,3 @@
+Build re-triggered 2026-10-14 17:55 EDT via GitHub connector.
+Previous run 38599342708 failed: platform VM replacement killed the self-hosted runner mid-build.
+This push re-runs the full build + deploy.
