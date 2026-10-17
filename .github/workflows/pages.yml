@@ -15,15 +15,41 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # One job per lane. A platform VM-kill only loses the in-flight lane
+  # (minutes), and "Re-run failed jobs" rebuilds just the failed lanes —
+  # completed lanes keep their artifacts, so nothing is ever rebuilt twice.
   build:
+    strategy:
+      fail-fast: false
+      matrix:
+        lane: [agents, core, field, foundry, ops, shield]
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Build every absorbed app into site/
-        run: bash scripts/ci_build_all.sh
+      - name: Build lane ${{ matrix.lane }} into site/
+        run: HIVE_LANE=${{ matrix.lane }} bash scripts/ci_build_all.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: site-${{ matrix.lane }}
+          path: site/
+          retention-days: 1
+
+  # Merge every lane slice, add cockpit/docs/index, write the truth report.
+  assemble:
+    needs: build
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: site-*
+          merge-multiple: true
+          path: site/
+      - name: Assemble site, report, cockpit
+        run: bash scripts/ci_assemble.sh
         env:
           HIVE_REPORT_BACK: "1"
       - uses: actions/configure-pages@v5
@@ -34,7 +60,7 @@ jobs:
           path: site
 
   deploy:
-    needs: build
+    needs: assemble
     runs-on: self-hosted
     environment:
       name: github-pages
