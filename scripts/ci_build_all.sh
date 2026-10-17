@@ -15,7 +15,16 @@ rm -rf "$SITE"
 mkdir -p "$SITE/apps"
 
 REPORT="$SITE/apps/_build_report.json"
-: > "$REPORT.txt"
+# Lane-sharded mode: HIVE_LANE=<lane> builds only apps/<lane>/*/, writes a
+# per-lane report, and skips the assemble tail (cockpit/docs/index/JSON
+# report/report-back all move to scripts/ci_assemble.sh).
+LANE_FILTER="${HIVE_LANE:-}"
+if [ -n "$LANE_FILTER" ]; then
+  REPORT_TXT="$SITE/apps/_report-$LANE_FILTER.txt"
+else
+  REPORT_TXT="$REPORT.txt"
+fi
+: > "$REPORT_TXT"
 
 copy_out() {
   local appdir="$1" dest="$2"
@@ -75,7 +84,7 @@ record() {
     [ -n "$err" ] || err="$(tail -4 "$logfile" 2>/dev/null | tr '\n' ' ' | cut -c1-600)"
     [ -n "$err" ] || err="$(grep -aE "Error:|Cannot find|failed" "$logfile" 2>/dev/null | head -1)"
   fi
-  printf '%s\t%s\t%s\n' "$id" "$status" "$err" >> "$REPORT.txt"
+  printf '%s\t%s\t%s\n' "$id" "$status" "$err" >> "$REPORT_TXT"
 }
 
 built=0; skipped=0; failed=0
@@ -84,6 +93,7 @@ for appdir in "$APPS"/*/*/; do
   [ -d "$appdir" ] || continue
   id="$(basename "$appdir")"
   lane="$(basename "$(dirname "$appdir")")"
+  if [ -n "$LANE_FILTER" ] && [ "$lane" != "$LANE_FILTER" ]; then continue; fi
   dest="$SITE/apps/$lane/$id"
   echo "=== $lane/$id ==="
 
@@ -142,6 +152,13 @@ for appdir in "$APPS"/*/*/; do
   fi
 done
 
+if [ -n "$LANE_FILTER" ]; then
+  echo "-----------------------------------------"
+  echo "lane=$LANE_FILTER built=$built skipped=$skipped failed=$failed"
+  echo "lane report: $REPORT_TXT"
+  exit 0
+fi
+
 # cockpit + static index
 cp -a "$ROOT/web/." "$SITE/"
 [ -d "$ROOT/docs" ] && { mkdir -p "$SITE/docs"; cp -a "$ROOT/docs/." "$SITE/docs/"; }
@@ -152,7 +169,7 @@ echo "built=$built skipped=$skipped failed=$failed"
 echo "site contents:"; find "$SITE" -maxdepth 3 -name index.html | sed "s#$SITE#  #"
 
 # per-app truth report (also lands in the Pages deploy + github-pages artifact)
-python3 - "$REPORT.txt" "$REPORT" "$built" "$skipped" "$failed" <<'PY'
+python3 - "$REPORT_TXT" "$REPORT" "$built" "$skipped" "$failed" <<'PY'
 import json, sys
 rows_file, out, built, skipped, failed = sys.argv[1:6]
 rows = {}
