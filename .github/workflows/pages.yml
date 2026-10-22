@@ -31,11 +31,20 @@ jobs:
           node-version: 20
       - name: Build lane ${{ matrix.lane }} into site/
         run: HIVE_LANE=${{ matrix.lane }} bash scripts/ci_build_all.sh
-      - uses: actions/upload-artifact@v4
+      # The 2026-10-17 run proved upload-artifact can stall mid-run
+      # ("Upload progress stalled" killed field/ops/foundry). Wrap it in
+      # retries and keep artifacts 7 days so a later re-run still finds
+      # the green lanes' slices.
+      - name: Upload site-${{ matrix.lane }} (retried)
+        uses: Wandalen/wretry.action@v3
         with:
-          name: site-${{ matrix.lane }}
-          path: site/
-          retention-days: 1
+          action: actions/upload-artifact@v4
+          attempt_limit: 3
+          attempt_delay: 60000
+          with: |
+            name: site-${{ matrix.lane }}
+            path: site/
+            retention-days: 7
 
   # Merge every lane slice, add cockpit/docs/index, write the truth report.
   assemble:
