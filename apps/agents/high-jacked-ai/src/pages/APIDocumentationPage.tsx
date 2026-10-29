@@ -44,7 +44,7 @@ export default function APIDocumentationPage() {
           </div>
           <div>
             <h1 className="text-3xl font-bold">API Documentation</h1>
-            <p className="text-muted-foreground">Complete guide to GROKSCHITT v18 APIs</p>
+            <p className="text-muted-foreground">Complete guide to HIGH-JACKED AI v18 APIs</p>
           </div>
         </div>
 
@@ -61,7 +61,7 @@ export default function APIDocumentationPage() {
             <Card className="p-6 bg-card/50">
               <h2 className="text-2xl font-bold mb-4">Getting Started</h2>
               <p className="text-muted-foreground mb-6">
-                GROKSCHITT v18 provides a comprehensive REST API for accessing all platform features including
+                HIGH-JACKED AI v18 provides a comprehensive REST API for accessing all platform features including
                 AI chat, fraud detection, image/video generation, and collaboration tools.
               </p>
 
@@ -132,14 +132,14 @@ const token = data.session.access_token;`}
                 code={`curl -X POST https://mdtpxtyyufetjvzamdtp.backend.onspace.ai/functions/v1/grok-chat \\
   -H "Authorization: Bearer YOUR_JWT_TOKEN" \\
   -H "Content-Type: application/json" \\
-  -d '{"message": "Hello GROK-MAX!"}'`}
+  -d '{"message": "Hello HIGH-JACKED AI!"}'`}
               />
             </Card>
           </TabsContent>
 
           <TabsContent value="chat" className="space-y-6">
             <Card className="p-6 bg-card/50">
-              <h2 className="text-2xl font-bold mb-4">GROK-MAX Chat API</h2>
+              <h2 className="text-2xl font-bold mb-4">HIGH-JACKED AI Chat API</h2>
               
               <h3 className="text-lg font-bold mb-3">Endpoint</h3>
               <CodeBlock

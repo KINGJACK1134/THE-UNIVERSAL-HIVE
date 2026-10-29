@@ -65,7 +65,7 @@ export default function AuthModal({ onClose }: AuthModalProps) {
       if (updateError) { toast.error(updateError.message); setLoading(false); return; }
     }
 
-    toast.success('Account created! Welcome to GROKSCHITT!');
+    toast.success('Account created! Welcome to HIGH-JACKED AI!');
     onClose();
   };
 
@@ -81,7 +81,7 @@ export default function AuthModal({ onClose }: AuthModalProps) {
               <h2 className="text-xl font-bold">
                 {step === 'login' ? 'Sign In' : step === 'register' ? 'Create Account' : 'Verify Email'}
               </h2>
-              <p className="text-xs text-muted-foreground">GROKSCHITT v18</p>
+              <p className="text-xs text-muted-foreground">HIGH-JACKED AI v18</p>
             </div>
           </div>
           <Button variant="ghost" size="icon" onClick={onClose}>

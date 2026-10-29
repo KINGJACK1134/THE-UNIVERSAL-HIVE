@@ -18,7 +18,7 @@ export default function Gateway() {
   const [sessionName, setSessionName] = useState('');
   const [activeTab, setActiveTab] = useState<'status' | 'sessions' | 'channels'>('status');
   const [logs, setLogs] = useState<string[]>([
-    '$ GROKSCHITT Gateway v18.0.0',
+    '$ HIGH-JACKED AI Gateway v18.0.0',
     '$ WebSocket: ws://127.0.0.1:18789',
     '$ Core Values: NEVER LEAVE A FRIEND BEHIND, SECRETS DON\'T MAKE FRIENDS',
     '$ Gateway ready...',

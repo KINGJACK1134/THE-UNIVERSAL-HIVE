@@ -131,8 +131,8 @@
   },
   {
     "lane": "agents",
-    "id": "grokschitt",
-    "path": "apps/agents/grokschitt",
+    "id": "high-jacked-ai",
+    "path": "apps/agents/high-jacked-ai",
     "stack": [
       "node",
       "react"
@@ -222,7 +222,7 @@
     "language": "TypeScript",
     "private": true,
     "last_updated": "2026-10-06",
-    "name": "vite_react_shadcn_ts",
+    "name": "HIGH-JACKED AI",
     "scripts": [
       "dev",
       "build",

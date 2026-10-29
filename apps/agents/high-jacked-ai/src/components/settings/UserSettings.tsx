@@ -28,7 +28,7 @@ export default function UserSettings() {
         </div>
         <div>
           <h2 className="text-2xl font-bold">User Settings</h2>
-          <p className="text-sm text-muted-foreground">Customize your GROKSCHITT experience</p>
+          <p className="text-sm text-muted-foreground">Customize your HIGH-JACKED AI experience</p>
         </div>
       </div>
 

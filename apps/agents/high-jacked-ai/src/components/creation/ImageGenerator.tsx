@@ -64,7 +64,7 @@ export default function ImageGenerator() {
     if (!generatedImage) return;
     const link = document.createElement('a');
     link.href = generatedImage;
-    link.download = `grokschitt-${Date.now()}.png`;
+    link.download = `high-jacked-${Date.now()}.png`;
     link.click();
   };
 

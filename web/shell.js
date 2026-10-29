@@ -331,9 +331,14 @@ async function boot() {
     $("#dot").className = "dot up";
     $("#rail-foot").textContent = `online · ${MAN.counts.apps} apps · ${MAN.counts.tools} tools`;
   } catch {
-    MAN = { law: LAW, apps: [], agents: [], tools: [], services: [], counts: { apps: 0, apps_built: 0, agents: 0, tools: 0, services: 0, pending_prompts: 0 }, core: {}, models: {} };
+    // Static (Pages) fallback: no live /api/shell here, so load the
+    // build-generated apps.json instead of showing an empty shell.
+    let apps = [];
+    try { apps = await jget("apps.json"); } catch { apps = []; }
+    if (!Array.isArray(apps)) apps = [];
+    MAN = { law: LAW, apps, agents: [], tools: [], services: [], counts: { apps: apps.length, apps_built: apps.filter(a => a.built).length, agents: 0, tools: 0, services: 0, pending_prompts: 0 }, core: {}, models: {} };
     $("#dot").className = "dot";
-    $("#rail-foot").textContent = "offline shell (Pages) — run the hive node for live data";
+    $("#rail-foot").textContent = `offline shell (Pages) · ${apps.length} apps — run the hive node for live data`;
   }
   go("home");
 }

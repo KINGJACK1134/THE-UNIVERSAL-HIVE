@@ -22,7 +22,7 @@ export default function NewsletterSignup() {
         body: {
           email: email.trim(),
           properties: {
-            platform: 'GROKSCHITT v18',
+            platform: 'HIGH-JACKED AI v18',
             signup_source: 'homepage'
           }
         }

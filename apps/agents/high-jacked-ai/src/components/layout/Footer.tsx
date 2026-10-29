@@ -11,7 +11,7 @@ export default function Footer() {
               <div className="w-10 h-10 rounded-lg gradient-cyber flex items-center justify-center">
                 <span className="text-xl font-bold text-white">G</span>
               </div>
-              <span className="text-xl font-bold text-gradient">GROKSCHITT</span>
+              <span className="text-xl font-bold text-gradient">HIGH-JACKED AI</span>
             </div>
             <p className="text-sm text-muted-foreground mb-4">
               v18 COMPLETE EDITION
@@ -93,7 +93,7 @@ export default function Footer() {
         <div className="mt-12 pt-8 border-t border-border/50">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-sm text-muted-foreground">
-              © 2025 GROKSCHITT. All features active. No limits.
+              © 2025 HIGH-JACKED AI. All features active. No limits.
             </p>
             <div className="flex gap-4 text-sm">
               <a 

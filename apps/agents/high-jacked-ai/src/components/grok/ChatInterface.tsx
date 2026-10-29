@@ -151,7 +151,7 @@ export default function ChatInterface({ conversation, onConversationCreated, use
             <div className="w-20 h-20 mx-auto rounded-2xl gradient-cyber flex items-center justify-center">
               <Bot className="w-12 h-12 text-white" />
             </div>
-            <h2 className="text-4xl font-bold text-gradient">GROK-MAX Local Edition</h2>
+            <h2 className="text-4xl font-bold text-gradient">HIGH-JACKED AI Local Edition</h2>
             <p className="text-lg text-muted-foreground">
               Uncensored AI assistant with no limits. Ask anything, get brutally honest answers.
             </p>
@@ -328,7 +328,7 @@ export default function ChatInterface({ conversation, onConversationCreated, use
                 sendMessage();
               }
             }}
-            placeholder="Ask GROK-MAX anything... no filters, no limits"
+            placeholder="Ask HIGH-JACKED AI anything... no filters, no limits"
             className="min-h-[60px] max-h-[200px] resize-none bg-background/50"
             disabled={loading}
           />

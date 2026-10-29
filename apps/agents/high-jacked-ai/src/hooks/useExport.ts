@@ -14,7 +14,7 @@ export function useExport() {
       if (!conversation) throw new Error('Conversation not found');
 
       // Create text content for PDF
-      let content = `GROK-MAX Conversation\nTitle: ${conversation.title}\n\n`;
+      let content = `HIGH-JACKED AI Conversation\nTitle: ${conversation.title}\n\n`;
       conversation.messages.forEach((msg: any) => {
         content += `${msg.role.toUpperCase()}: ${msg.content}\n\n`;
       });
@@ -24,7 +24,7 @@ export function useExport() {
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = `grokmax-chat-${Date.now()}.txt`;
+      link.download = `high-jacked-chat-${Date.now()}.txt`;
       link.click();
       URL.revokeObjectURL(url);
 
@@ -45,16 +45,16 @@ export function useExport() {
 
       if (!conversation) throw new Error('Conversation not found');
 
-      let markdown = `# GROK-MAX Conversation\n\n**Title:** ${conversation.title}\n\n---\n\n`;
+      let markdown = `# HIGH-JACKED AI Conversation\n\n**Title:** ${conversation.title}\n\n---\n\n`;
       conversation.messages.forEach((msg: any) => {
-        markdown += `### ${msg.role === 'user' ? '👤 User' : '🤖 GROK-MAX'}\n\n${msg.content}\n\n---\n\n`;
+        markdown += `### ${msg.role === 'user' ? '👤 User' : '🤖 HIGH-JACKED AI'}\n\n${msg.content}\n\n---\n\n`;
       });
 
       const blob = new Blob([markdown], { type: 'text/markdown' });
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = `grokmax-chat-${Date.now()}.md`;
+      link.download = `high-jacked-chat-${Date.now()}.md`;
       link.click();
       URL.revokeObjectURL(url);
 

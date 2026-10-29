@@ -46,7 +46,7 @@ export default function FunctionFactory() {
     setFunctions(prev => [newFunction, ...prev]);
 
     try {
-      // Call GROK-MAX to generate the function
+      // Call HIGH-JACKED AI to generate the function
       const { data, error } = await supabase.functions.invoke('grok-chat', {
         body: {
           message: `Generate a complete TypeScript Edge Function for OnSpace Cloud that implements this requirement: ${requirement}

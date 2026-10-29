@@ -85,7 +85,7 @@ export default function GrokMaxPage() {
                 <span className="text-2xl font-bold text-white">G</span>
               </div>
               <div>
-                <h1 className="text-lg font-bold text-gradient">GROK-MAX</h1>
+                <h1 className="text-lg font-bold text-gradient">HIGH-JACKED AI</h1>
                 <p className="text-xs text-muted-foreground">Local Edition • Uncensored AI</p>
               </div>
             </div>
@@ -96,7 +96,7 @@ export default function GrokMaxPage() {
               variant="ghost"
               size="icon"
               onClick={() => navigate('/')}
-              title="Back to GROKSCHITT"
+              title="Back to HIGH-JACKED AI"
             >
               <Home className="w-5 h-5" />
             </Button>

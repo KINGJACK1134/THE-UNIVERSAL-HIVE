@@ -33,7 +33,7 @@ export default function Hero() {
               onClick={() => navigate('/grok-max')}
             >
               <MessageSquare className="w-5 h-5 mr-2" />
-              Try GROK-MAX Chat
+              Try HIGH-JACKED AI Chat
             </Button>
             <Button
               size="lg"

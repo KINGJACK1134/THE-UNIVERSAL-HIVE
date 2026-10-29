@@ -46,6 +46,14 @@
     .dot { width:9px; height:9px; border-radius:50%; background:#555; flex:0 0 auto; }
     .dot.up { background:var(--live); box-shadow:0 0 8px var(--live); }
     .who { font-size:11px; color:var(--muted); }
+    .greet { margin:16px 20px 0; background:linear-gradient(135deg, rgba(201,162,39,.16), rgba(201,162,39,.04)), var(--card);
+             border:1px solid rgba(201,162,39,.42); border-radius:20px; padding:18px 20px;
+             box-shadow:0 6px 22px rgba(0,0,0,.3); }
+    .greet .who-line { font-size:11px; letter-spacing:.16em; color:var(--moss); font-weight:700; }
+    .greet h2 { margin:6px 0 6px; font-size:22px; }
+    .greet p { margin:0 0 14px; color:#d8dae2; font-size:14.5px; max-width:58ch; }
+    .greet .sig { color:var(--muted); font-size:12px; margin-left:10px; }
+    @media (max-width:720px) { .greet { margin:12px 14px 0; } }
     .place { flex:1; overflow:auto; padding:20px; padding-bottom:84px; }
     .place h2 { margin:0 0 4px; font-size:19px; }
     .place .sub { color:var(--muted); font-size:12.5px; margin-bottom:14px; }
@@ -119,6 +127,15 @@
       <input class="cmd" id="cmd" placeholder="search or launch anything — app, agent, tool, service  (press /)"/>
       <span class="who" id="who"></span>
     </div>
+    <div class="greet" id="greet">
+      <div class="who-line">KRACKERJACK AI — THE ME IN DIGITAL FORM</div>
+      <h2>Welcome to the Hive.</h2>
+      <p>I'm KRACKERJACK AI, and this is THE UNIVERSAL HIVE — awake, out of the box, and open. It only needs you to want to do something; it doesn't matter if it's small or huge. Anything is possible, and nothing is out of reach unless you're not reaching for it.</p>
+      <div>
+        <button class="pri" id="greet-go">COME ON IN</button>
+        <span class="sig">— KRACKERJACK AI</span>
+      </div>
+    </div>
     <div class="place" id="place"></div>
   </div>
 </div>
@@ -141,5 +158,10 @@
 </div>
 
 <script src="shell.js"></script>
+<script>
+  document.getElementById('greet-go').addEventListener('click', function () {
+    document.getElementById('greet').style.display = 'none';
+  });
+</script>
 </body>
 </html>

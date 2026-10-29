@@ -183,7 +183,7 @@ export default function VideoGenerator() {
                 onClick={() => {
                   const link = document.createElement('a');
                   link.href = generatedVideo;
-                  link.download = `grokschitt-video-${Date.now()}.mp4`;
+                  link.download = `high-jacked-video-${Date.now()}.mp4`;
                   link.click();
                 }}
                 variant="outline"

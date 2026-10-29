@@ -35,7 +35,7 @@ export default function Header() {
                 <span className="text-2xl font-bold text-white">G</span>
               </div>
               <div>
-                <h1 className="text-xl font-bold text-gradient">GROKSCHITT</h1>
+                <h1 className="text-xl font-bold text-gradient">HIGH-JACKED AI</h1>
                 <p className="text-xs text-muted-foreground">v18 COMPLETE EDITION</p>
               </div>
             </div>
