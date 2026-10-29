@@ -21,6 +21,31 @@ for a in man:
 
 json.dump(out, open(os.path.join(site, "apps.json"), "w", encoding="utf-8"), indent=2)
 
+# --- agents.json: static twin of /api/shell's agents() for the Pages build.
+# Derived from seed/registry.json + seed/prompts.json so the shell's Agents
+# view has real data on static hosting (no live /api there).
+try:
+    _seed = os.path.dirname(os.path.abspath(__file__))
+    _reg = json.load(open(os.path.join(_seed, "registry.json"), encoding="utf-8")).get("agents", {})
+    _prm = json.load(open(os.path.join(_seed, "prompts.json"), encoding="utf-8"))
+    _prompts = _prm.get("prompts", {}) or {}
+    _tasks = _prm.get("tasks", {}) or {}
+    _agents = []
+    for _aid, _meta in _reg.items():
+        _agents.append({
+            "id": _aid,
+            "name": _meta.get("name") or _aid,
+            "desc": _meta.get("description") or "",
+            "prompt_set": bool((_prompts.get(_aid) or {}).get("text")),
+            "task_set": bool(_tasks.get(_aid)),
+            "notes": _meta.get("notes", ""),
+        })
+    _agents.sort(key=lambda a: (a["id"] != "employee-alpha", a["id"]))
+    json.dump(_agents, open(os.path.join(site, "agents.json"), "w", encoding="utf-8"), indent=2)
+    print(f"generated agents.json ({len(_agents)} agents)")
+except Exception as _e:  # never fail the site build over the agents index
+    print(f"agents.json skipped: {_e}")
+
 by_lane = {}
 for a in out:
     by_lane.setdefault(a["lane"], []).append(a)

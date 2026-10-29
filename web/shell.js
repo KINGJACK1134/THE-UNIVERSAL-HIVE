@@ -336,7 +336,10 @@ async function boot() {
     let apps = [];
     try { apps = await jget("apps.json"); } catch { apps = []; }
     if (!Array.isArray(apps)) apps = [];
-    MAN = { law: LAW, apps, agents: [], tools: [], services: [], counts: { apps: apps.length, apps_built: apps.filter(a => a.built).length, agents: 0, tools: 0, services: 0, pending_prompts: 0 }, core: {}, models: {} };
+    let agents = [];
+    try { agents = await jget("agents.json"); } catch { agents = []; }
+    if (!Array.isArray(agents)) agents = [];
+    MAN = { law: LAW, apps, agents, tools: [], services: [], counts: { apps: apps.length, apps_built: apps.filter(a => a.built).length, agents: agents.length, tools: 0, services: 0, pending_prompts: 0 }, core: {}, models: {} };
     $("#dot").className = "dot";
     $("#rail-foot").textContent = `offline shell (Pages) · ${apps.length} apps — run the hive node for live data`;
   }
