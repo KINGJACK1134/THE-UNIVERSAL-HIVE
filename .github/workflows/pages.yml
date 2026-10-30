@@ -15,15 +15,20 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # One job per lane. A platform VM-kill only loses the in-flight lane
-  # (minutes), and "Re-run failed jobs" rebuilds just the failed lanes —
-  # completed lanes keep their artifacts, so nothing is ever rebuilt twice.
+  # One job per lane, all lanes in PARALLEL on GitHub-hosted runners
+  # (free for this public repo). Wall clock = the slowest lane, not the
+  # sum of all six. A failed lane re-runs alone; completed lanes keep
+  # their artifacts, so nothing is ever rebuilt twice.
+  # (Was self-hosted until 2026-10-30: one runner ran the lanes strictly
+  # one at a time — ~55 min of building per push — and the hourly VM
+  # swaps kept killing it. Hosted runners end both problems. Flip any
+  # runs-on back to self-hosted to return to the powerplant.)
   build:
     strategy:
       fail-fast: false
       matrix:
         lane: [agents, core, field, foundry, ops, shield]
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -49,7 +54,7 @@ jobs:
   # Merge every lane slice, add cockpit/docs/index, write the truth report.
   assemble:
     needs: build
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
@@ -70,7 +75,7 @@ jobs:
 
   deploy:
     needs: assemble
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
