@@ -22,6 +22,26 @@ cp -a "$ROOT/web/." "$SITE/"
 [ -d "$ROOT/docs" ] && { mkdir -p "$SITE/docs"; cp -a "$ROOT/docs/." "$SITE/docs/"; }
 python3 "$ROOT/seed/ci_site.py" "$APPS" "$SITE" || true
 
+# ASSET PATH REPAIR (2026-10-30): Vite-built apps emit root-absolute asset
+# references (src="/assets/..."), but they are served from /apps/<lane>/<id>/
+# subpaths, so the browser requests the bundle from the domain root, gets a
+# 404, and the app opens dead (HIGH-JACKED AI was the reported case; every
+# Vite-built app had it). Rewrite entry-document references to relative ones
+# so each app resolves its own assets wherever it is served from.
+find "$SITE/apps" -name 'index.html' -type f 2>/dev/null | while read -r f; do
+  sed -i \
+    -e 's#\(src\|href\)="/assets/#\1="./assets/#g' \
+    -e 's#\(src\|href\)="/manifest.json"#\1="./manifest.json"#g' \
+    -e 's#\(src\|href\)="/vite.svg"#\1="./vite.svg"#g' \
+    "$f"
+done
+# CSS files live inside assets/; root-absolute asset urls inside CSS get the
+# same treatment, relative to the CSS file itself.
+find "$SITE/apps" -name '*.css' -type f 2>/dev/null | while read -r f; do
+  sed -i 's#url(/assets/#url(./#g' "$f"
+done
+echo "asset path repair applied"
+
 # per-app truth report, merged from every lane (also lands in the Pages
 # deploy + github-pages artifact)
 python3 - "$MERGED_TXT" "$REPORT" <<'PY'
