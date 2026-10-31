@@ -17,7 +17,23 @@ for a in man:
         "lane": a["lane"], "id": a["id"], "name": a.get("name") or a["id"],
         "stack": a.get("stack", []), "source_repo": a.get("source_repo"),
         "built": built, "url": f"/{rel}/" if built else None,
+        "web": a.get("web"), "embed": bool(a.get("embed")),
     })
+
+# External entries (apps/EXTERNAL.json): live sites hosted elsewhere (OnSpace,
+# Wix). They join apps.json so the static shell can launch them via web/embed.
+try:
+    _ext_path = os.path.join(apps_dir, "EXTERNAL.json")
+    if os.path.isfile(_ext_path):
+        for _e in json.load(open(_ext_path, encoding="utf-8")):
+            out.append({
+                "lane": _e.get("lane", "host"), "id": _e["id"],
+                "name": _e.get("name") or _e["id"], "stack": [],
+                "source_repo": None, "built": False, "url": None,
+                "web": _e.get("url"), "embed": bool(_e.get("embed")),
+            })
+except Exception as _xe:  # never fail the site build over externals
+    print(f"externals skipped: {_xe}")
 
 json.dump(out, open(os.path.join(site, "apps.json"), "w", encoding="utf-8"), indent=2)
 
@@ -56,6 +72,8 @@ for lane in sorted(by_lane):
     for a in sorted(by_lane[lane], key=lambda x: x["id"]):
         if a["built"]:
             rows.append(f'<li><a href="/{html.escape(a["lane"])}/{html.escape(a["id"])}/">{html.escape(a["name"])}</a> <small>{html.escape(",".join(a["stack"]) or a["source_repo"] or "")}</small></li>')
+        elif a.get("web"):
+            rows.append(f'<li><a href="{html.escape(a["web"])}">{html.escape(a["name"])}</a> <small>live — hosted on OnSpace</small></li>')
         else:
             rows.append(f'<li class="off">{html.escape(a["name"])} <small>not built</small></li>')
     rows.append("</ul>")

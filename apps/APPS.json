@@ -231,7 +231,9 @@
       "preview"
     ],
     "uses_supabase": true,
-    "has_env": true
+    "has_env": true,
+    "web": "https://react-9b5j66.onspace.build",
+    "embed": true
   },
   {
     "lane": "agents",
@@ -336,7 +338,7 @@
     "language": "TypeScript",
     "private": true,
     "last_updated": "2026-10-06",
-    "name": "vite_react_shadcn_ts",
+    "name": "KRACKERJACK AI",
     "scripts": [
       "dev",
       "build",
@@ -345,7 +347,9 @@
       "preview"
     ],
     "uses_supabase": true,
-    "has_env": true
+    "has_env": true,
+    "web": "https://react-9bii1c.onspace.build",
+    "embed": true
   },
   {
     "lane": "agents",

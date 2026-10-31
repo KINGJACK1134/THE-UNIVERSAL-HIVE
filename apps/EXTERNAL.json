@@ -7,5 +7,23 @@
     "url": "https://jackschitt1134.wixsite.com/the-universal-hive",
     "embed": false,
     "blurb": "Public Wix presence. Embeds the Hive via web/embed.html; opens the live site here."
+  },
+  {
+    "lane": "host",
+    "id": "krackerjack-ai-hud",
+    "name": "KRACKERJACK AI HUD",
+    "kind": "external",
+    "url": "https://react-9bida1.onspace.build",
+    "embed": true,
+    "blurb": "Live KRACKERJACK AI heads-up display, hosted on OnSpace; opens embedded in the shell."
+  },
+  {
+    "lane": "host",
+    "id": "jackschitt-ai-os",
+    "name": "JACKSCHITT AI OS",
+    "kind": "external",
+    "url": "https://react-9bjaft.onspace.build",
+    "embed": true,
+    "blurb": "Live JackschittAiOs build, hosted on OnSpace; opens embedded in the shell."
   }
 ]

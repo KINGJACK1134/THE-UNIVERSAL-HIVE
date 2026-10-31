@@ -53,6 +53,16 @@
     .greet h2 { margin:6px 0 6px; font-size:22px; }
     .greet p { margin:0 0 14px; color:#d8dae2; font-size:14.5px; max-width:58ch; }
     .greet .sig { color:var(--muted); font-size:12px; margin-left:10px; }
+    .seat { margin:16px 20px 0; background:var(--card); border:1px solid rgba(201,162,39,.42); border-radius:20px; padding:18px 20px; box-shadow:0 4px 16px rgba(0,0,0,.25); }
+    .seat h2 { margin:0 0 6px; font-size:20px; }
+    .seat p { margin:0 0 10px; color:#d8dae2; font-size:14.5px; max-width:65ch; }
+    .seat ul { margin:0 0 12px; padding-left:18px; color:#d8dae2; font-size:14.5px; }
+    .seat .honest { color:var(--muted); font-size:12.5px; }
+    .seat .wall { margin-top:14px; border-top:1px solid var(--line); padding-top:12px; color:var(--muted); font-size:13px; }
+    .seat .wall b { color:var(--paper); }
+    .seat a.pri { display:inline-block; background:var(--moss); color:#0A0A0A; border-radius:999px; padding:11px 16px; font-weight:700; min-height:44px; text-decoration:none; margin:4px 8px 4px 0; }
+    .seat a.gh2 { display:inline-block; background:transparent; border:1px solid var(--line); color:var(--paper); border-radius:999px; padding:11px 16px; min-height:44px; text-decoration:none; margin:4px 0; }
+    @media (max-width:720px) { .seat { margin:12px 14px 0; } }
     @media (max-width:720px) { .greet { margin:12px 14px 0; } }
     .place { flex:1; overflow:auto; padding:20px; padding-bottom:84px; }
     .place h2 { margin:0 0 4px; font-size:19px; }
@@ -136,6 +146,22 @@
         <span class="sig">— KRACKERJACK AI</span>
       </div>
     </div>
+    <div class="seat" id="hive-seat">
+      <h2>THE HIVE SEAT — Contributing Founder of THE UNIVERSAL HIVE</h2>
+      <p>The Hive is free to build and free to use for the people who need it most — broke builders with nothing but a phone and an idea. That only works if somebody covers the real bills: hosting, domains, tools, services. Hive Seat holders are the ones who cover them.</p>
+      <ul>
+        <li><b>$49 claims the seat.</b> A founding position in THE UNIVERSAL HIVE.</li>
+        <li><b>$19.99/month keeps it active.</b> Stop contributing, and the seat and its promotion pause with it.</li>
+        <li>Seat holders are listed on the <b>Hive Founders wall</b>, and their business or project is <b>advertised and promoted weekly</b> across Hive surfaces.</li>
+        <li>Anyone can also chip in any amount, any time, toward the Hive's actual posted costs.</li>
+      </ul>
+      <p class="honest">Honest label: this is an early founder-partner program and the benefits are still being built. No commissions, no referral payouts, no guaranteed customers are promised.</p>
+      <div>
+        <a class="pri" href="https://buy.stripe.com/dRm7sK2Ej6bfebEavr3oA1M" target="_blank" rel="noopener">Claim your Hive Seat — $49 + $19.99/mo</a>
+        <a class="gh2" href="https://buy.stripe.com/28EaEWa6L8jn4B4eLH3oA1N" target="_blank" rel="noopener">Chip in toward the bills — any amount</a>
+      </div>
+      <div class="wall"><b>Founders wall</b> — (First names go here as seats are claimed.)</div>
+    </div>
     <div class="place" id="place"></div>
   </div>
 </div>
@@ -158,6 +184,7 @@
 </div>
 
 <script src="shell.js"></script>
+<script src="krackerjack.js"></script>
 <script>
   document.getElementById('greet-go').addEventListener('click', function () {
     document.getElementById('greet').style.display = 'none';

@@ -260,8 +260,8 @@ function openWin(title, bodyHTML, { nopad = false } = {}, extURL = null) {
   $("#win-ext").onclick = () => extURL && window.open(extURL, "_blank");
 }
 function openApp(a) {
-  if (a.built && a.url) return openWin(a.name || a.id, `<iframe src="${a.url}"></iframe>`, { nopad: true }, a.url);
   if (a.web && a.embed) return openWin(a.name || a.id, `<iframe src="${a.web}"></iframe>`, { nopad: true }, a.web);
+  if (a.built && a.url) return openWin(a.name || a.id, `<iframe src="${a.url}"></iframe>`, { nopad: true }, a.url);
   openWin(a.name || a.id,
     `<div class="card"><h3>${a.name || a.id}</h3><div class="meta">${a.blurb || ""}</div>
       <p>${a.web ? "External app. " : "Not built on this node yet. "}${a.web ? `<a href="${a.web}" target="_blank">open live site</a> · ` : ""}
