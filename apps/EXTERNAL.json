@@ -25,5 +25,14 @@
     "url": "https://react-9bjaft.onspace.build",
     "embed": true,
     "blurb": "Live JackschittAiOs build, hosted on OnSpace; opens embedded in the shell."
+  },
+  {
+    "lane": "host",
+    "id": "hive-tools",
+    "name": "Hive Tools",
+    "kind": "external",
+    "url": "https://hive-tools-development.vercel.app/",
+    "embed": true,
+    "blurb": "Hive Architect Console — the Hive Tools front. Console display only until the core (JOB #1) is wired."
   }
 ]
