@@ -346,3 +346,130 @@ async function boot() {
   go("home");
 }
 boot();
+
+// ---- THE ARCHITECT'S LOGIN -------------------------------------------------
+// The combination is set by the Architect himself, on this device, through
+// this panel. It is never typed anywhere else: only a salted SHA-256 hash of
+// the sequence is kept (localStorage, this browser). The entered sequence
+// itself is hashed in memory and never stored or sent anywhere.
+(function () {
+  const btn = document.getElementById("arch-login");
+  const panel = document.getElementById("arch-panel");
+  const status = document.getElementById("arch-status");
+  const dotsEl = document.getElementById("arch-dots");
+  const padEl = document.getElementById("arch-pad");
+  const fsBtn = document.getElementById("arch-failsafe");
+  const cxBtn = document.getElementById("arch-cancel");
+  if (!btn || !panel) return;
+
+  const HKEY = "arch.hash", SKEY = "arch.salt", SES = "hive.arch.session";
+  let entry = [], phase = "idle", firstSet = null, fails = 0, timer = null, left = 0;
+
+  padEl.innerHTML = RAIL.map(([id, ic, label]) =>
+    `<button type="button" data-arch="${id}"><span class="ic">${ic}</span> ${label}</button>`).join("");
+
+  async function hashOf(seq, salt) {
+    const msg = salt + "|" + seq.join(">");
+    if (crypto?.subtle) {
+      const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(msg));
+      return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, "0")).join("");
+    }
+    let h = 0x811c9dc5; // fallback (non-secure contexts only)
+    for (let i = 0; i < msg.length; i++) { h ^= msg.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; }
+    return "fnv" + h.toString(16);
+  }
+  const dots = () => [...dotsEl.children].forEach((d, i) => d.classList.toggle("full", i < entry.length));
+  function say(t) { status.innerHTML = t; }
+  function stopTimer() { if (timer) { clearInterval(timer); timer = null; } }
+  function close() {
+    stopTimer(); entry = []; firstSet = null; phase = "idle"; dots();
+    panel.hidden = true; btn.classList.remove("armed");
+  }
+  function arm(seconds, label) {
+    stopTimer(); left = seconds;
+    say(`${label} <span id="arch-timer">${left}</span>`);
+    timer = setInterval(() => {
+      left--; const t = document.getElementById("arch-timer");
+      if (t) t.textContent = left;
+      if (left <= 0) { say("Time. The window closed."); close(); }
+    }, 1000);
+  }
+  function openPanel() {
+    panel.hidden = false; entry = []; dots();
+    if (sessionStorage.getItem(SES) === "1") {
+      phase = "in"; say("You are in as THE ARCHITECT. Tap the button above to lock.");
+      return;
+    }
+    if (load(HKEY, "")) {
+      phase = "login"; btn.classList.add("armed");
+      arm(30, "The words are gone. Enter your combination.");
+    } else {
+      phase = "setup1"; say("No combination is set on this device yet. Set yours: press any 6 buttons.");
+    }
+  }
+  async function pressed(id) {
+    if (phase !== "login" && phase !== "setup1" && phase !== "setup2") return;
+    entry.push(id); dots();
+    if (entry.length < 6) return;
+    const seq = entry; entry = [];
+    if (phase === "setup1") {
+      firstSet = seq; phase = "setup2"; dots();
+      say("Once more, to confirm it."); return;
+    }
+    if (phase === "setup2") {
+      if (seq.join() !== firstSet.join()) {
+        phase = "setup1"; firstSet = null; dots();
+        say("Those did not match. Set it again: press any 6 buttons."); return;
+      }
+      const salt = [...crypto.getRandomValues(new Uint8Array(12))].map(b => b.toString(16).padStart(2, "0")).join("");
+      store(SKEY, salt); store(HKEY, await hashOf(seq, salt));
+      say("Your combination is set — on this device, by you alone. Use the button to log in.");
+      setTimeout(close, 1600); return;
+    }
+    // login
+    const ok = (await hashOf(seq, load(SKEY, ""))) === load(HKEY, "");
+    if (ok) {
+      stopTimer(); sessionStorage.setItem(SES, "1");
+      OP = "KRACKERJACK1134"; store("operator", OP);
+      btn.classList.remove("armed"); btn.classList.add("architect");
+      btn.querySelector(".arch-label").textContent = "THE ARCHITECT — IN";
+      const who = document.getElementById("who"); if (who) who.textContent = "KRACKERJACK1134 · THE ARCHITECT";
+      say("Welcome back, Architect."); phase = "in";
+      setTimeout(() => { panel.hidden = true; }, 1200);
+    } else {
+      fails++; dots();
+      if (fails >= 3) { say("Three misses. The window closed — the FAIL SAFE is in the panel when you reopen it."); setTimeout(close, 1400); fails = 0; }
+      else say(`Not it. ${3 - fails} ${3 - fails === 1 ? "try" : "tries"} left in this window.`);
+    }
+  }
+  padEl.addEventListener("click", e => {
+    const b = e.target.closest("[data-arch]"); if (b) pressed(b.dataset.arch);
+  });
+  btn.addEventListener("click", () => {
+    if (sessionStorage.getItem(SES) === "1") {
+      sessionStorage.removeItem(SES);
+      btn.classList.remove("architect");
+      btn.querySelector(".arch-label").textContent = "THE ARCHITECT’S LOGIN";
+      phase = "idle"; panel.hidden = true; stopTimer(); return;
+    }
+    if (panel.hidden) openPanel(); else close();
+  });
+  cxBtn.addEventListener("click", close);
+  fsBtn.addEventListener("click", () => {
+    stopTimer(); entry = []; dots(); phase = "failsafe";
+    say("FAIL SAFE — this device only: wiping clears the combination set here so a new one can be set. Your combination itself never leaves this browser; the Hive-core connect code becomes the anywhere fail safe when the core is live.");
+    fsBtn.textContent = "WIPE COMBINATION ON THIS DEVICE";
+    fsBtn.onclick = () => {
+      localStorage.removeItem("hive." + HKEY); localStorage.removeItem("hive." + SKEY);
+      sessionStorage.removeItem(SES);
+      fsBtn.textContent = "FAIL SAFE";
+      say("Wiped. Reopen the panel and set a new combination.");
+      setTimeout(close, 1400);
+    };
+  });
+  if (sessionStorage.getItem(SES) === "1") {
+    btn.classList.add("architect");
+    btn.querySelector(".arch-label").textContent = "THE ARCHITECT — IN";
+    OP = "KRACKERJACK1134";
+  }
+})();
