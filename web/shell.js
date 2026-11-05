@@ -591,3 +591,70 @@ boot();
     applyArchitect(true);
   }
 })();
+
+// ---- MEMBER LOGIN (the Hive shell) ------------------------------------------
+// The member door. A member key is set by the member, on their own device:
+// only a salted SHA-256 hash is kept (localStorage, this browser). The panel
+// says plainly what this is — a device key that signs you in HERE. Full
+// member accounts that follow you everywhere arrive with the Hive core
+// (JOB #1 identity layer); the Hive Seat is claimed with the same email
+// used at checkout.
+(function () {
+  const btn = document.getElementById("member-btn");
+  const ui = document.getElementById("member-ui");
+  if (!btn || !ui) return;
+  const HK = "hive.member.handle", HH = "hive.member.hash", HS = "hive.member.salt", SES = "hive.member.session";
+  const get = k => localStorage.getItem(k);
+  const set = (k, v) => localStorage.setItem(k, v);
+  async function hashOf(str, salt) {
+    const msg = salt + "|" + str;
+    if (crypto?.subtle) {
+      const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(msg));
+      return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, "0")).join("");
+    }
+    let h = 0x811c9dc5;
+    for (let i = 0; i < msg.length; i++) { h ^= msg.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; }
+    return "fnv" + h.toString(16);
+  }
+  const signedIn = () => sessionStorage.getItem(SES) === "1" && get(HK);
+  function paintBtn() { btn.textContent = signedIn() ? "MEMBER — @" + get(HK) : "MEMBER LOGIN"; }
+  const TRUTH = `<p style="font-size:12px;color:var(--muted)">Your member key is stored only on this device — it signs you in here, on this device. Full member accounts that follow you everywhere arrive with the Hive core. The Hive Seat is claimed with the same email you used at checkout.</p>`;
+  function show(html) { ui.innerHTML = html; ui.hidden = false; }
+  function panelHome() {
+    if (signedIn()) {
+      show(`<p><b>You're signed in as @${get(HK)}</b> — Free Member on this device.</p>
+        <button class="gh" id="m-out" type="button">SIGN OUT</button>` + TRUTH);
+      document.getElementById("m-out").onclick = () => { sessionStorage.removeItem(SES); paintBtn(); ui.hidden = true; };
+    } else if (get(HH)) {
+      show(`<p><b>Welcome back.</b> Enter your member passcode.</p>
+        <input id="m-pass" type="password" placeholder="Your passcode" style="width:100%;min-height:44px;margin:6px 0;border-radius:12px;padding:0 12px">
+        <button class="pri" id="m-go" type="button">SIGN IN</button>
+        <button class="gh" id="m-wipe" type="button">FORGOT IT — WIPE THIS DEVICE'S KEY</button>` + TRUTH);
+      document.getElementById("m-go").onclick = async () => {
+        const v = document.getElementById("m-pass").value;
+        if ((await hashOf(v, get(HS) || "")) === get(HH)) { sessionStorage.setItem(SES, "1"); paintBtn(); panelHome(); }
+        else show(`<p>That passcode doesn't match this device's member key.</p>` + TRUTH);
+      };
+      document.getElementById("m-wipe").onclick = () => {
+        [HK, HH, HS].forEach(k => localStorage.removeItem(k)); sessionStorage.removeItem(SES); paintBtn(); panelHome();
+      };
+    } else {
+      show(`<p><b>Create your member key.</b> Pick a handle and a passcode — you set them, here, yourself.</p>
+        <input id="m-handle" type="text" placeholder="Your handle (e.g. nightwatch7)" style="width:100%;min-height:44px;margin:6px 0;border-radius:12px;padding:0 12px">
+        <input id="m-pass1" type="password" placeholder="Passcode" style="width:100%;min-height:44px;margin:6px 0;border-radius:12px;padding:0 12px">
+        <input id="m-pass2" type="password" placeholder="Passcode again" style="width:100%;min-height:44px;margin:6px 0;border-radius:12px;padding:0 12px">
+        <button class="pri" id="m-create" type="button">CREATE MY MEMBER KEY</button>` + TRUTH);
+      document.getElementById("m-create").onclick = async () => {
+        const h = document.getElementById("m-handle").value.trim().replace(/^@+/, "");
+        const a = document.getElementById("m-pass1").value, b = document.getElementById("m-pass2").value;
+        if (!h || a.length < 4) { show(`<p>Pick a handle and a passcode of at least 4 characters.</p>` + TRUTH); return; }
+        if (a !== b) { show(`<p>Those passcodes did not match. Try again.</p>` + TRUTH); return; }
+        const salt = [...crypto.getRandomValues(new Uint8Array(12))].map(x => x.toString(16).padStart(2, "0")).join("");
+        set(HS, salt); set(HH, await hashOf(a, salt)); set(HK, h);
+        sessionStorage.setItem(SES, "1"); paintBtn(); panelHome();
+      };
+    }
+  }
+  btn.addEventListener("click", () => { if (ui.hidden) panelHome(); else ui.hidden = true; });
+  paintBtn();
+})();
