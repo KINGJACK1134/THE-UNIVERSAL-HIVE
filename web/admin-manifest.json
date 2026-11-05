@@ -1085,7 +1085,7 @@
    "kind": "tool",
    "url": null,
    "state": "built-not-live",
-   "verified": "Read on disk 2026-11-05 (~/workspace/hive-standalone/hive-vision/): real numpy code \u2014 45-dim feature fingerprints, perceptual hashes, template matching, k-NN/logistic ML, Haar face-region detection + redaction, voice-activity segmentation, EXIF reading \u2014 built and demo-tested 2026-10-29. Hard limits in its own README: detection finds face REGIONS only (never identifies/names a person, no embeddings); the Knightmare image-match corpus is EMPTY until Jack supplies labeled evidence; transcription is SPEC \u2014 no STT engine installed on this VM.",
+   "verified": "Read on disk 2026-11-05 (~/workspace/hive-standalone/hive-vision/): real numpy code \u2014 45-dim feature fingerprints, perceptual hashes, template matching, k-NN/logistic ML, Haar face-region detection + redaction, voice-activity segmentation, EXIF reading \u2014 built and tested 2026-10-29. Hard limits in its own README: detection finds face REGIONS only (never identifies/names a person, no embeddings); the Knightmare image-match corpus is EMPTY until Jack supplies labeled evidence; transcription is SPEC \u2014 no STT engine installed on this VM.",
    "out": "Admin UI would call it as a local library/CLI (or a future core service); match results return as ranked CANDIDATES queued PENDING_HUMAN_REVIEW \u2014 a match never auto-confirms.",
    "in": "Writes result files locally (results/ dir). No live surface consumes its output; nothing reports to the Knightmare case file or SUPERHIGHBASE automatically.",
    "gaps": [
@@ -1150,11 +1150,11 @@
    "kind": "data",
    "url": null,
    "state": "built-not-live",
-   "verified": "Read-only sqlite3 inspection 2026-11-05: superhighbase.db present (184,320 bytes, schema from 2026-10-30) with 10 tables \u2014 autobiographical_narrative, episodic_memory, knowledge_edges, knowledge_nodes, memory_graph_edges, memory_graph_nodes, narrative_memory, performance_metrics, system_logs, world_model_narrative \u2014 ALL 0 rows. No identity, agent-registry, surface-registry, or token-ledger tables exist. hiverouter_server.py (port 8642: GET /health, GET /v1/agents, POST /v1/chat/completions) self-tested 2026-11-04 per hive-core README but is not running persistently and has no public endpoint; /v1/agents honestly returns an empty list.",
+   "verified": "Registry tables BUILT + seeded 2026-11-05 (agents 28, connected_surfaces 15, architect_identity 1) \u2014 verified by direct read after the slice-2 build",
    "out": "Admin UI would query it through the Hive core (HIVEROUTER server, localhost:8642) \u2014 no route exists today; the UI cannot reach the DB directly from a browser or phone.",
    "in": "Nothing writes to it. No app, agent, or service reports into SUPERHIGHBASE today; system_logs and performance_metrics have never received a row.",
    "gaps": [
-    "JOB #1 slice 2 not built: agent registry, connected-surfaces registry, Architect Identity tables, ZORG event log, token ledger tables all missing from the schema",
+    "Persistent public hosting of the core service",
     "Core server not hosted persistently (VM swaps kill local processes; no public URL)",
     "No auth/access layer between a future UI and the DB"
    ],
@@ -1165,14 +1165,14 @@
    "name": "Architect Identity root record (KRACKERJACK1134, THE ARCHITECT, OWNER)",
    "kind": "data",
    "url": null,
-   "state": "design-only",
-   "verified": "Spec read 2026-11-05: files/architect-identity-standard.md (Jack's order 2026-10-31) defines the root record as belonging in SUPERHIGHBASE with ONE core-issued credential that travels with him. Verified absent in practice: SUPERHIGHBASE has no identity table and 0 rows (sqlite inspection 2026-11-05). What exists live instead is the per-site Architect's Login shipped 2026-11-04/05: a knock-code (6 sets of 1-9 clicks, activation) + his self-set 6-button combination, stored only as salted SHA-256 hashes in each browser's localStorage on hive.scammersknightmare.com and scammersknightmare.com \u2014 single-code rule: his code is the ONLY code, no one else can use it or create their own, no multi-user enrollment.",
+   "state": "built-not-live",
+   "verified": "Root record EXISTS (1 row, shape only, no credential columns) \u2014 verified 2026-11-05",
    "out": "Target design: Admin UI signs in once at the core; the shell session carries the OWNER role into every app. Today: per-site localStorage hashes only \u2014 the Admin UI would have to sit behind the same dual-security gate (knock activation + his combination) on its own origin.",
    "in": "No identity verification callbacks exist. Apps do not check any token against a core; the two live sites only set a local sessionStorage flag after his combination verifies locally.",
    "gaps": [
+    "Hosted identity service + per-device credential issuance",
     "Root record and credential issuance are JOB #1 slice 2 \u2014 not built",
-    "Per-device/per-site setup today: he sets his combination separately on each origin; the anywhere-version requires the core identity record",
-    "Apps that cannot reach the core must fail closed for owner access (spec rule) \u2014 no app implements the check yet"
+    "Per-device/per-site setup today: he sets his combination separately on each origin; the anywhere-version requires the core identity record"
    ],
    "connect_action": "core-gated"
   },
@@ -1181,13 +1181,13 @@
    "name": "Per-app connect-code registry",
    "kind": "data",
    "url": null,
-   "state": "design-only",
-   "verified": "Spec read 2026-11-05 (architect-identity-standard.md, Jack 2026-10-31): 'Just have to ask them individually for the connect code' \u2014 the Architect asks each app, the app hands over its code, the code registers in SUPERHIGHBASE against the Architect identity and the app's record, opening that app's status lane and support lane. Verified status: zero connect codes have been collected and no registry table exists (SUPERHIGHBASE inspection 2026-11-05). Candidate first asks named in prior work: assimilateordie-builder, krackerjackai, scammersknightmare-onspace, grokschitt.",
+   "state": "built-not-live",
+   "verified": "Registry home built (connected_surfaces, 15 rows) \u2014 verified 2026-11-05; per-app codes still to be collected app by app",
    "out": "Admin UI would list each app with its registered code status and open the two lanes (status + support/debug) per app once its code is registered.",
    "in": "No app has been asked yet; no app reports a code or status back. Identity traces exist inside some extracted builds (Assimilate Or Die builder, KRACKERJACK AI) per the standard's 2026-10-31 verification note; BlindmanAI, the HUD, and JackschittAiOs carry none until rebuilt.",
    "gaps": [
+    "Ask each app for its connect code (Architect standard) and register it",
     "Each ask is a separate manual step, several behind app logins only Jack can open",
-    "No registry table in SUPERHIGHBASE (slice 2)",
     "Legacy/third-party-hosted apps cannot be retrofitted from outside \u2014 they sit behind the shell session until rebuilt"
    ],
    "connect_action": "core-gated"
@@ -1197,14 +1197,14 @@
    "name": "KRACKERJACK Token ledger (KRACKERJACK / ARCHITECT / JACKSCHITT / SCRAP TOKENS)",
    "kind": "data",
    "url": null,
-   "state": "design-only",
-   "verified": "Design read 2026-11-05: files/krackerjack-token-system.md (Jack's design, dictated 2026-11-04). Four denominations sold monthly as in-app credits via Stripe; partial remainders sweep to the Scrap Yard and combine into universal SCRAP TOKENS spendable in any of his apps. Ledger home is SUPERHIGHBASE \u2014 explicitly 'a JOB #1 slice-2 candidate'; no ledger table exists (sqlite inspection 2026-11-05) and nothing has been sold.",
+   "state": "built-not-live",
+   "verified": "token_ledger table BUILT 2026-11-05 (0 rows \u2014 no tokens issued yet)",
    "out": "Admin UI would read balances, issuance, and scrap-yard sweeps from the SUPERHIGHBASE ledger and sell/manage denominations through the one working Stripe account.",
    "in": "No app reports token spend; no Stripe product exists for any denomination; nothing flows back.",
    "gaps": [
+    "Denomination ruling + first issuance through the core",
     "Denomination split is Jack's undecided call (Ren's strawman only)",
-    "SOVEREIGN must review the final shape before any sale (in-app-credit lane only: no cash-out, no resale)",
-    "Ledger tables + spend hooks in every app are unbuilt (slice 2 + per-app work)"
+    "SOVEREIGN must review the final shape before any sale (in-app-credit lane only: no cash-out, no resale)"
    ],
    "connect_action": "core-gated"
   },
