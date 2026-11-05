@@ -119,6 +119,30 @@
       .rail button .n { display:none; }
       .place { padding-bottom:104px; }
     }
+
+    /* ---------- THE ARCHITECT'S LOGIN ---------- */
+    .arch-wrap { padding: 4px 10px 10px; }
+    #arch-login { width: 100%; min-height: 44px; border-radius: 999px; border: 1px solid rgba(201,162,39,.55);
+      background: rgba(201,162,39,.10); color: var(--paper); font-weight: 800; letter-spacing: .12em;
+      font-size: 12px; cursor: pointer; }
+    #arch-login .arch-label { transition: opacity .25s; }
+    #arch-login.armed .arch-label { opacity: 0; }
+    #arch-login.architect { background: rgba(201,162,39,.85); color: #14100a; }
+    #arch-panel { margin-top: 10px; background: var(--card, #1a1d26); border: 1px solid rgba(201,162,39,.35);
+      border-radius: 18px; padding: 14px; }
+    #arch-panel[hidden] { display: none; }
+    #arch-status { font-size: 13px; color: #d8dae2; min-height: 18px; margin-bottom: 10px; }
+    #arch-timer { color: var(--warn); font-weight: 800; }
+    .arch-dots { display: flex; gap: 8px; margin: 4px 0 12px; }
+    .arch-dots span { width: 16px; height: 16px; border-radius: 50%; border: 2px solid rgba(201,162,39,.7); }
+    .arch-dots span.full { background: var(--warn); }
+    .arch-pad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .arch-pad button { min-height: 48px; border-radius: 14px; border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.05); color: var(--paper); font-size: 13px; font-weight: 700; cursor: pointer; }
+    .arch-pad button:active { background: rgba(201,162,39,.35); }
+    .arch-row { display: flex; gap: 8px; margin-top: 12px; }
+    .arch-row button { flex: 1; min-height: 40px; border-radius: 999px; border: 1px solid rgba(255,255,255,.18);
+      background: transparent; color: var(--muted); font-size: 12px; font-weight: 700; cursor: pointer; }
   </style>
 </head>
 <body>
@@ -127,6 +151,18 @@
     <div class="brand">
       <h1>THE UNIVERSAL HIVE</h1>
       <div class="law">Provide for all. Find the good. Never limit unnecessarily.</div>
+    </div>
+    <div class="arch-wrap">
+      <button id="arch-login" type="button"><span class="arch-label">THE ARCHITECT&rsquo;S LOGIN</span></button>
+      <div id="arch-panel" hidden>
+        <div id="arch-status"></div>
+        <div class="arch-dots" id="arch-dots"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        <div class="arch-pad" id="arch-pad"></div>
+        <div class="arch-row">
+          <button id="arch-failsafe" type="button">FAIL SAFE</button>
+          <button id="arch-cancel" type="button">CANCEL</button>
+        </div>
+      </div>
     </div>
     <nav id="rail"></nav>
     <div class="foot" id="rail-foot">shell · loading…</div>
