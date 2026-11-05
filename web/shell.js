@@ -530,6 +530,60 @@ boot();
     sessionStorage.removeItem(SES);
     endUI("Wiped. Click the button and set your locks again.");
   });
+  // ---- THE ADMIN UI (behind this login only) --------------------------------
+  // Renders admin-manifest.json — the assimilation of the whole Hive: every
+  // surface, agent, money rail, tool and data store, with its connection
+  // state and direction. The rail door exists only while the Architect is in.
+  let adminBtn = null;
+  function showAdminDoor(on) {
+    const rail = document.getElementById("rail");
+    if (!rail) return;
+    if (on && !adminBtn) {
+      adminBtn = document.createElement("button");
+      adminBtn.type = "button";
+      adminBtn.innerHTML = '<span class="ic">\u2699</span> Admin UI';
+      adminBtn.addEventListener("click", ev => { ev.stopPropagation(); renderAdmin(); });
+      rail.appendChild(adminBtn);
+    } else if (!on && adminBtn) { adminBtn.remove(); adminBtn = null; }
+  }
+  const CHIP = { live: "#7ee2a0", "front-only": "#e8c96a", "built-not-live": "#e8c96a",
+                 "design-only": "#a7abb8", offline: "#e88a8a", gated: "#e8c96a", "artifact-only": "#a7abb8" };
+  const KIND = { surface: "SURFACES & SITES", agent: "AGENTS & BOTS", money: "MONEY RAILS",
+                 tool: "TOOLS & MODEL ROUTES", data: "DATA, MEMORY & IDENTITY" };
+  async function renderAdmin() {
+    const host = document.getElementById("place");
+    if (!host) return;
+    host.innerHTML = "<h2>THE ADMIN UI</h2><p class='muted'>Reading the Hive's connection manifest\u2026</p>";
+    let m;
+    try { m = await (await fetch("admin-manifest.json", { cache: "no-store" })).json(); }
+    catch { host.innerHTML = "<h2>THE ADMIN UI</h2><p>The manifest is not on this host yet.</p>"; return; }
+    const rows = m.rows || [];
+    const counts = {};
+    rows.forEach(r => { counts[r.state] = (counts[r.state] || 0) + 1; });
+    let html = "<h2>THE ADMIN UI</h2>" +
+      "<p class='muted'>The whole Hive, assimilated: " + rows.length + " connections. " +
+      Object.entries(counts).map(([k, v]) => v + " " + k).join(" \u00b7 ") +
+      ". Where a row says CORE-GATED, its wiring is drawn and it lights the day the Hive core (JOB #1) has a home.</p>";
+    for (const [kind, title] of Object.entries(KIND)) {
+      const kr = rows.filter(r => r.kind === kind);
+      if (!kr.length) continue;
+      html += "<h3 style='margin-top:22px'>" + title + "</h3>";
+      for (const r of kr) {
+        html += "<div class='seat' style='margin-bottom:10px'><h4 style='margin:0 0 4px'>" + r.name +
+          " <span style='color:" + (CHIP[r.state] || "#a7abb8") + ";font-size:12px;letter-spacing:.08em'>" +
+          r.state.toUpperCase() + " \u00b7 " + String(r.connect_action).toUpperCase() + "</span></h4>" +
+          "<p style='margin:2px 0'><b>UI \u2192 it:</b> " + r.out + "</p>" +
+          "<p style='margin:2px 0'><b>It \u2192 UI:</b> " + r.in + "</p>" +
+          (r.gaps && r.gaps.length ? "<p style='margin:2px 0' class='muted'><b>Missing:</b> " + r.gaps.join("; ") + "</p>" : "") +
+          (r.url ? "<p style='margin:6px 0 0'><a href='" + r.url + "' target='_blank' rel='noopener'>OPEN</a></p>" : "") +
+          "</div>";
+      }
+    }
+    host.innerHTML = html;
+  }
+  const _apply = applyArchitect;
+  applyArchitect = function (on) { _apply(on); showAdminDoor(on); };
+
   if (sessionStorage.getItem(SES) === "1") {
     btn.classList.add("architect");
     btn.querySelector(".arch-label").textContent = "THE ARCHITECT — IN";
