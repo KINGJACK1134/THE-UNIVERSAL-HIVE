@@ -142,7 +142,7 @@
     .arch-pad button { min-height: 48px; border-radius: 14px; border: 1px solid rgba(255,255,255,.14);
       background: rgba(255,255,255,.05); color: var(--paper); font-size: 13px; font-weight: 700; cursor: pointer; }
     .arch-pad button:active { background: rgba(201,162,39,.35); }
-    #arch-failsafe, #arch-deact { margin-top: 10px; background: none; border: none; color: var(--muted);
+    #arch-failsafe, #arch-deact, #arch-lock { margin-top: 10px; background: none; border: none; color: var(--muted);
       font-size: 11.5px; letter-spacing: .1em; font-weight: 700; cursor: pointer; padding: 6px 0; }
   </style>
 </head>
@@ -161,6 +161,7 @@
         <div id="arch-padwrap" hidden><div class="arch-pad" id="arch-pad"></div></div>
         <button id="arch-failsafe" type="button" hidden>FAIL SAFE</button>
         <button id="arch-deact" type="button" hidden>DEACTIVATE THIS DEVICE</button>
+        <button id="arch-lock" type="button" hidden>LOCK THIS SESSION</button>
       </div>
     </div>
     <nav id="rail"></nav>
