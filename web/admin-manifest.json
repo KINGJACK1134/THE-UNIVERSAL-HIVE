@@ -1,0 +1,1437 @@
+{
+ "manifest": "THE UNIVERSAL HIVE \u2014 Admin UI Connection Manifest",
+ "generated": "2026-11-05",
+ "ordered_by": "KRACKERJACK1134 \u2014 assimilation first, then the Admin UI; everything ready to connect from both directions",
+ "count": 93,
+ "rows": [
+  {
+   "id": "knightmare-front",
+   "name": "Scammers Knightmare \u2014 public front door",
+   "kind": "surface",
+   "url": "https://scammersknightmare.com/",
+   "state": "live",
+   "verified": "curl 200 + 'SCAMMERS KNIGHTMARE' marker x7, 2026-11-05; architect.js present in served HTML",
+   "out": "open \u2014 Admin UI opens it; it already carries the shared Architect's Login gate (architect.js)",
+   "in": "none-yet \u2014 the Architect gate state is local to the visitor's browser (localStorage/sessionStorage); the page sends no status anywhere",
+   "gaps": [
+    "No status/health endpoint the Admin UI can poll",
+    "Directory, scanner and case data are baked into static HTML \u2014 Admin UI cannot read or update them without a redeploy",
+    "No API for sign-ups, reports or case intake"
+   ],
+   "connect_action": "open"
+  },
+  {
+   "id": "krackerjack-store",
+   "name": "KRACKERJACK STORE (Knightmare /store)",
+   "kind": "surface",
+   "url": "https://scammersknightmare.com/store",
+   "state": "live",
+   "verified": "curl 200 + 'KRACKERJACK STORE' marker x5, 97,593 bytes served, 2026-11-05",
+   "out": "open \u2014 Admin UI opens it; same architect.js gate rides the page",
+   "in": "none-yet \u2014 the page itself reports nothing; sales truth lives in Stripe (money pass), not in this surface",
+   "gaps": [
+    "No product/inventory feed \u2014 catalogue is static HTML, price or listing changes need a full-set redeploy",
+    "Automated digital delivery (/dl) not live on production, so the store cannot confirm fulfillment back to an Admin UI"
+   ],
+   "connect_action": "open"
+  },
+  {
+   "id": "knightmare-dashboard",
+   "name": "Knightmare member dashboard",
+   "kind": "surface",
+   "url": "https://scammersknightmare.com/dashboard",
+   "state": "front-only",
+   "verified": "curl 200 + Scan/Reports sections present, 2026-11-05; estate audit 2026-11-04: static front, no live data source verifiable from outside",
+   "out": "open today; real connection needs the Hive core API behind it",
+   "in": "none-yet \u2014 renders shell sections only; no account, scan or report data flows in or out",
+   "gaps": [
+    "No backend: no accounts, no live scan/report data",
+    "Admin UI cannot read member state or push anything to it until the core exists"
+   ],
+   "connect_action": "core-gated"
+  },
+  {
+   "id": "knightmare-terms",
+   "name": "Knightmare Terms of Service",
+   "kind": "surface",
+   "url": "https://scammersknightmare.com/terms",
+   "state": "live",
+   "verified": "curl 200 + 'Terms' marker, 2026-11-05",
+   "out": "open \u2014 Admin UI opens the document",
+   "in": "none-yet \u2014 static document, no version feed",
+   "gaps": [
+    "Text changes only via redeploy; no version/effective-date feed for the Admin UI to track"
+   ],
+   "connect_action": "open"
+  },
+  {
+   "id": "knightmare-privacy",
+   "name": "Knightmare Privacy Policy",
+   "kind": "surface",
+   "url": "https://scammersknightmare.com/privacy",
+   "state": "live",
+   "verified": "curl 200 + 'Privacy' marker, 2026-11-05",
+   "out": "open \u2014 Admin UI opens the document",
+   "in": "none-yet \u2014 static document, no version feed",
+   "gaps": [
+    "Text changes only via redeploy; no version/effective-date feed for the Admin UI to track"
+   ],
+   "connect_action": "open"
+  },
+  {
+   "id": "knightmare-discord-terms",
+   "name": "Hive Discord Bot Terms of Service",
+   "kind": "surface",
+   "url": "https://scammersknightmare.com/discord-terms",
+   "state": "live",
+   "verified": "curl 200 + 'DISCORD' marker, 2026-11-05",
+   "out": "open \u2014 Admin UI opens the document; the four Discord apps link here",
+   "in": "none-yet \u2014 static document",
+   "gaps": [
+    "No link between this page's version and the bot apps' registered terms until the bots run"
+   ],
+   "connect_action": "open"
+  },
+  {
+   "id": "knightmare-discord-privacy",
+   "name": "Hive Discord Bot Privacy Policy",
+   "kind": "surface",
+   "url": "https://scammersknightmare.com/discord-privacy",
+   "state": "live",
+   "verified": "curl 200 + 'DISCORD' marker, 2026-11-05",
+   "out": "open \u2014 Admin UI opens the document; the four Discord apps link here",
+   "in": "none-yet \u2014 static document",
+   "gaps": [
+    "No link between this page's version and the bot apps' registered terms until the bots run"
+   ],
+   "connect_action": "open"
+  },
+  {
+   "id": "hive-shell",
+   "name": "THE UNIVERSAL HIVE shell (published site + Architect's Login)",
+   "kind": "surface",
+   "url": "https://hive.scammersknightmare.com/",
+   "state": "front-only",
+   "verified": "curl 200 + 'UNIVERSAL HIVE' marker x5, 2026-11-05; same-day check: GET /api/shell returns 404 \u2014 no Hive core behind the shell",
+   "out": "open/embed \u2014 the Admin UI is designed to live behind this shell's Architect's Login; the shell already renders the app registry and hosts the KRACKERJACK AI panel (live wire via a public model route)",
+   "in": "none-yet \u2014 /api/shell, /api/core, /api/prompts all 404 on this host; nothing reports state to an Admin UI because the core does not exist yet",
+   "gaps": [
+    "JOB #1 Hive core backend missing \u2014 the shell's API endpoints 404",
+    "Architect identity is per-browser localStorage only; no core-hosted identity record, so the login does not travel between devices",
+    "App registry is a static file (see hive-app-registry row)"
+   ],
+   "connect_action": "core-gated"
+  },
+  {
+   "id": "hive-app-registry",
+   "name": "Hive app registry (apps.json)",
+   "kind": "surface",
+   "url": "https://hive.scammersknightmare.com/apps.json",
+   "state": "live",
+   "verified": "curl 200, 41 entries (17 built, 6 with live web URLs), 2026-11-05",
+   "out": "api \u2014 the Admin UI can fetch this JSON today; it is the closest thing to a live surfaces registry",
+   "in": "none-yet \u2014 the file is static; it changes only when someone pushes a new version, and entries carry no live health/status",
+   "gaps": [
+    "No per-app live status \u2014 'built' is a build flag, not proof an app runs",
+    "A fuller 46-entry registry (incl. PEDO HUNTER + Copyright Registry) is staged but not promoted to production",
+    "Registry should move into SUPERHIGHBASE so the Admin UI can read and write it"
+   ],
+   "connect_action": "api"
+  },
+  {
+   "id": "americans-gateway",
+   "name": "THE AMERICANS gateway \u2192 SimDif party site",
+   "kind": "surface",
+   "url": "https://americans.scammersknightmare.com/",
+   "state": "live",
+   "verified": "curl 200 (follows to the SimDif site, 137,113 bytes, 'AMERICANS' marker x7), 2026-11-05",
+   "out": "open \u2014 Admin UI can only open it; the target is a third-party SimDif site",
+   "in": "none \u2014 a SimDif site cannot report back, accept embeds of Hive code, or expose an API",
+   "gaps": [
+    "No code can be injected on SimDif: no Architect's Login, no paywall rule, no status feed is possible there",
+    "True two-way connection requires moving the party site to Hive hosting"
+   ],
+   "connect_action": "manual"
+  },
+  {
+   "id": "devil-gateway",
+   "name": "Running Over The Devil gateway \u2192 SimDif site",
+   "kind": "surface",
+   "url": "https://devil.scammersknightmare.com/",
+   "state": "live",
+   "verified": "curl 200 (follows to runninoverthedevil.simdif.com content, 137,776 bytes), 2026-11-05",
+   "out": "open \u2014 Admin UI can only open it; the target is a third-party SimDif site",
+   "in": "none \u2014 a SimDif site cannot report back or expose an API",
+   "gaps": [
+    "Same SimDif ceiling as the Americans gateway: no injection, no identity, no feed",
+    "True connection requires Hive hosting"
+   ],
+   "connect_action": "manual"
+  },
+  {
+   "id": "hive-tools-console",
+   "name": "Hive Tools / Hive Architect Console",
+   "kind": "surface",
+   "url": "https://hive-tools-development.vercel.app/",
+   "state": "front-only",
+   "verified": "curl 200 + 'Hive' marker, 32,727 bytes, 2026-11-05; estate audit 2026-11-04: console front serves, its displayed stats are page content with no backend verifiable from outside",
+   "out": "embed \u2014 already linked from the Knightmare front nav and registered in the Hive shell app list (id 'hive-tools', built:false \u2014 honest)",
+   "in": "none-yet \u2014 displayed execution/plan stats are front-end content (unverified), and the capability layer's worker handlers are partly stubs",
+   "gaps": [
+    "No live node behind the console: search/archive/extract etc. are not wired to a running worker",
+    "Project sits under a Vercel team the main connection cannot see \u2014 Admin UI cannot manage its deployments from the current connection",
+    "Publicly reachable console exposes internal-looking stats"
+   ],
+   "connect_action": "embed"
+  },
+  {
+   "id": "scamshield-original",
+   "name": "Original ScamShield app (deploypad)",
+   "kind": "surface",
+   "url": "https://secure-detect-report.deploypad.app/",
+   "state": "front-only",
+   "verified": "curl 200 + 'ScamShield' marker x5, 33,626 bytes, 2026-11-05; estate audit 2026-11-04: app shell serves; accounts/scanning/admin functions not verifiable from outside",
+   "out": "open \u2014 Admin UI opens it; an admin-accounts block was delivered 2026-11-04 for its builder AI to apply (that app's build limit resets 2026-11-08)",
+   "in": "none-yet \u2014 no feed from the app to any Hive surface; its data lives inside the deploypad app",
+   "gaps": [
+    "Closed third-party builder platform: no API, no export wired, functions unverifiable",
+    "Admin UI connection waits on either the app's own admin working or a Hive rebuild (Foundry queue)"
+   ],
+   "connect_action": "core-gated"
+  },
+  {
+   "id": "foundry-gateway",
+   "name": "Foundry gateway (app-foundry)",
+   "kind": "surface",
+   "url": "https://foundry.scammersknightmare.com/",
+   "state": "front-only",
+   "verified": "curl 200 + 'Foundry' marker x4, 6,067 bytes, 2026-11-05; backend state inferred from the record: the FoundryAgent backend was live-tested 2026-10-22 but is not deployed",
+   "out": "open today; real connection rides the Foundry/core deployment",
+   "in": "none-yet \u2014 no deployed agent backend reports through this host",
+   "gaps": [
+    "FoundryAgent deployment is gated on Jack's Supabase project pick + OpenRouter key (action list #3/#2)",
+    "Until then this is a front with nothing behind it for the Admin UI to drive"
+   ],
+   "connect_action": "core-gated"
+  },
+  {
+   "id": "knightmare-social-prototype",
+   "name": "Scammers Knightmare Social (private prototype)",
+   "kind": "surface",
+   "url": null,
+   "state": "artifact-only",
+   "verified": "in-app artifact 'scammers-knightmare-social' per the delivery record 2026-10-28; not a public URL \u2014 nothing to curl",
+   "out": "manual \u2014 Jack opens it inside the app; the Admin UI cannot reach it until it is hosted",
+   "in": "none-yet \u2014 prototype data lives in the artifact sandbox only",
+   "gaps": [
+    "No public hosting \u2014 by design there is NO live 'ENTER THE SOCIAL SITE' button yet",
+    "Public launch design places it inside HIGHJACKED AI with card-at-signup clickwrap, standalone card-charge consent, active-monitoring disclosure and the adult-content firewall \u2014 none built yet"
+   ],
+   "connect_action": "manual"
+  },
+  {
+   "connect_action": "core-gated",
+   "gaps": [
+    "No runtime exists \u2014 it is a registry card, not a running agent",
+    "Needs a HIVEROUTER route + SUPERHIGHBASE agent-registry row (JOB #1 slice 2)",
+    "Claimed persistent memory has no store behind it"
+   ],
+   "id": "employee-alpha",
+   "in": "none-yet",
+   "kind": "agent",
+   "name": "EMPLOYEE ALPHA AI",
+   "out": "Nothing real today. The Admin UI can only display the registry card; there is no endpoint to task it.",
+   "state": "front-only",
+   "url": "https://hive.scammersknightmare.com/agents.json",
+   "verified": "agents.json fetched live 2026-11-05: entry present, prompt_set true, task_set false, notes claim hired worker with persistent memory \u2014 but no backend exists behind the registry entry (shell /api/* 404s on GitHub Pages)."
+  },
+  {
+   "connect_action": "core-gated",
+   "gaps": [
+    "No model is loaded or served anywhere \u2014 the OBLITERATUS weights cannot run on any device Jack owns (765 GB)",
+    "Needs HIVEROUTER (hiverouter_server.py slice 1 exists, not deployed) to give 'base' a live route via the free-model catalog"
+   ],
+   "id": "base",
+   "in": "none-yet",
+   "kind": "agent",
+   "name": "base (Universal Hive base model)",
+   "out": "None. The Admin UI can show it; nothing can invoke it.",
+   "state": "front-only",
+   "url": "https://hive.scammersknightmare.com/agents.json",
+   "verified": "agents.json fetched live 2026-11-05: entry present, prompt_set false, task_set false, 'frozen prime directive'. BRAIN.md read same day: the Prime Directive lives as text in BRAIN.md, not as a callable model."
+  },
+  {
+   "connect_action": "core-gated",
+   "gaps": [
+    "No runtime, no route, no task inbox",
+    "Needs JOB #1 slice 2 agent registry + a model route before the Admin UI can put it to work"
+   ],
+   "id": "code",
+   "in": "none-yet",
+   "kind": "agent",
+   "name": "code",
+   "out": "None \u2014 display only.",
+   "state": "front-only",
+   "url": "https://hive.scammersknightmare.com/agents.json",
+   "verified": "agents.json fetched live 2026-11-05: 'software architecture', sub-agent, no inherited specialization, prompt/task unset."
+  },
+  {
+   "connect_action": "core-gated",
+   "gaps": [
+    "No runtime, no route, no task inbox",
+    "Needs JOB #1 slice 2 agent registry + a model route"
+   ],
+   "id": "creative",
+   "in": "none-yet",
+   "kind": "agent",
+   "name": "creative",
+   "out": "None \u2014 display only.",
+   "state": "front-only",
+   "url": "https://hive.scammersknightmare.com/agents.json",
+   "verified": "agents.json fetched live 2026-11-05: 'ideation and brainstorming', sub-agent, prompt/task unset."
+  },
+  {
+   "connect_action": "core-gated",
+   "gaps": [
+    "No runtime behind the card",
+    "Needs the core agent registry + HIVEROUTER before it can be tasked from the Admin UI"
+   ],
+   "id": "opencode",
+   "in": "none-yet",
+   "kind": "agent",
+   "name": "opencode",
+   "out": "None \u2014 display only. (The actual build/maintenance work today is done by Ren and the Foundry, not by this entry.)",
+   "state": "front-only",
+   "url": "https://hive.scammersknightmare.com/agents.json",
+   "verified": "agents.json fetched live 2026-11-05: 'operating agent that builds and maintains the Hive', loads BASE only, specializations operator-saved."
+  },
+  {
+   "connect_action": "core-gated",
+   "gaps": [
+    "No runtime, no route, no task inbox",
+    "Needs JOB #1 slice 2 agent registry + a model route"
+   ],
+   "id": "ops",
+   "in": "none-yet",
+   "kind": "agent",
+   "name": "ops",
+   "out": "None \u2014 display only.",
+   "state": "front-only",
+   "url": "https://hive.scammersknightmare.com/agents.json",
+   "verified": "agents.json fetched live 2026-11-05: 'operations support', sub-agent, prompt/task unset."
+  },
+  {
+   "connect_action": "core-gated",
+   "gaps": [
+    "No runtime, no route, no task inbox",
+    "Needs JOB #1 slice 2 agent registry + a model route"
+   ],
+   "id": "research",
+   "in": "none-yet",
+   "kind": "agent",
+   "name": "research",
+   "out": "None \u2014 display only.",
+   "state": "front-only",
+   "url": "https://hive.scammersknightmare.com/agents.json",
+   "verified": "agents.json fetched live 2026-11-05: 'structured reasoning', sub-agent, prompt/task unset."
+  },
+  {
+   "connect_action": "embed",
+   "gaps": [
+    "Brain is a small free model on a keyless third-party route \u2014 a thin wire, not the Hive core",
+    "No conversation log, no task/action channel back into the Hive (action markers OPEN/GO only navigate the shell)",
+    "Identity is prompt-carried, not registry-carried; the Architect Identity layer (core) is what makes it him everywhere"
+   ],
+   "id": "krackerjack-ai-panel",
+   "in": "none-yet \u2014 the panel is stateless chat (last-10-turns in page memory); nothing reports back to any registry or log the Admin UI can read.",
+   "kind": "agent",
+   "name": "KRACKERJACK AI (live-wire panel, Hive shell)",
+   "out": "The Admin UI can embed the panel as-is (it is FIVE component #1 on the shell) and, once the core exists, swap its brain from the Pollinations route to HIVEROUTER without changing the surface.",
+   "state": "live",
+   "url": "https://hive.scammersknightmare.com/",
+   "verified": "Live-tested from the VM 2026-11-05 (Pollinations keyless text route answered in Jack's voice/doctrine), krackerjack.js pushed (commit 66b880b6) and verified serving on the shell the same night. Jack's ruling 2026-11-05: KRACKERJACK AI is him in digital form across the board, no conversation/work split."
+  },
+  {
+   "connect_action": "manual",
+   "gaps": [
+    "Token door is Jack's pick (action #1) \u2014 no token has ever been revealed or stored",
+    "No durable host: this VM swaps hourly; needs Termux-on-Android or the workstation",
+    "No bridge from Discord activity to SUPERHIGHBASE / the Admin UI"
+   ],
+   "id": "discord-krackerjack-bot",
+   "in": "none-yet \u2014 no feed; when running it would speak only inside Discord.",
+   "kind": "agent",
+   "name": "KRACKERJACK BOT (Discord)",
+   "out": "Admin UI cannot reach it today. Once hosted, the UI reaches it the way anyone does: Discord channels #general / #hive-private (1566432190953422878), slash commands /knightmare /directory /report /premium.",
+   "state": "built-not-live",
+   "url": null,
+   "verified": "Code read on disk 2026-11-05 (~/workspace/hive-standalone/discord-bot/bot.py + hive_bot_common.py); README state 2026-11-01: app 1566384715475193896 exists, bot user in guild SCAMMERS KNIGHTMARE (1566385045378437190), Terms/Privacy saved, smoke-tested token-free. Never run with a token."
+  },
+  {
+   "connect_action": "manual",
+   "gaps": [
+    "Token (GAME_ASSISTANT_BOT_TOKEN) gated on Jack's token-door pick",
+    "No durable host",
+    "Self-contained by design \u2014 a status line in the Admin UI is the realistic connection, not command"
+   ],
+   "id": "discord-game-assistant",
+   "in": "none-yet",
+   "kind": "agent",
+   "name": "GAME ASSISTANT BOT (Discord)",
+   "out": "Admin UI cannot reach it today; when live, via Discord mentions/commands only.",
+   "state": "built-not-live",
+   "url": null,
+   "verified": "Code read on disk 2026-11-05 (game_assistant_bot.py); README 2026-11-01: app 1566396867045105697, in guild, built-in 14-game shelf, /gamehelp /pickgame /rules, no external calls."
+  },
+  {
+   "connect_action": "manual",
+   "gaps": [
+    "Token (KRACKERJACK_AI_BOT_TOKEN) gated on Jack's token-door pick",
+    "No durable host",
+    "Core not built \u2014 the bot's deep answers wait on JOB #1 by its own honest design"
+   ],
+   "id": "discord-krackerjack-ai",
+   "in": "none-yet \u2014 question log is a local file on whatever host runs it; nothing ships it to the Admin UI.",
+   "kind": "agent",
+   "name": "KRACKERJACK AI (Discord bot seat)",
+   "out": "Admin UI cannot reach it today; when live, via Discord. Its real brain connection is the Hive core, same as the panel.",
+   "state": "built-not-live",
+   "url": null,
+   "verified": "Code read on disk 2026-11-05 (krackerjack_ai_bot.py); README 2026-11-01: app 1566402531662364843, in guild. /ask honestly answers that the live Hive core (JOB #1) is not connected yet and logs questions to krackerjack_ai_questions.log \u2014 no fake thinking. This is the Discord seat of the same digital form as the live shell panel."
+  },
+  {
+   "connect_action": "manual",
+   "gaps": [
+    "Token (THAT_GUY_AI_BOT_TOKEN) gated on Jack's token-door pick",
+    "No durable host",
+    "No test-report format or delivery channel to a hiring business yet \u2014 needed before it can be sold"
+   ],
+   "id": "discord-that-guy-ai",
+   "in": "none-yet \u2014 test results would live in Discord channels only.",
+   "kind": "agent",
+   "name": "THAT GUY AI (Discord)",
+   "out": "Admin UI cannot reach it today; when live, via Discord. Bookings/tests are commissioned manually through Jack.",
+   "state": "built-not-live",
+   "url": null,
+   "verified": "Code read on disk 2026-11-05 (that_guy_ai_bot.py); README 2026-11-01: app 1566410617047482518, in guild. Disgruntled-customer persona businesses hire to stress-test their support \u2014 a paid support-QA money line; /thatguy /scenario (8 scenarios) /booktest (booking routed through Jack)."
+  },
+  {
+   "connect_action": "core-gated",
+   "gaps": [
+    "Deployment blocked on Jack's Supabase project pick (action #3) and his OpenRouter key via the secure route (action #2)",
+    "agentService.ts endpoint is an OnSpace preview URL \u2014 must be replaced with the Hive endpoint",
+    "No presence in SUPERHIGHBASE (registry is empty)"
+   ],
+   "id": "foreman",
+   "in": "none-yet \u2014 its one live test was conversational; no run log or status feed exists.",
+   "kind": "agent",
+   "name": "FOREMAN (FoundryAgent)",
+   "out": "Admin UI cannot reach it today. Designed path: deploy the backend, point agentService at the Hive endpoint, and the link flow pairs it to the App Foundry.",
+   "state": "built-not-live",
+   "url": null,
+   "verified": "Code on disk read 2026-11-05 (~/workspace/hive-standalone/foundry-agent/, 57 files; services/agentService.ts still points at an OnSpace preview URL with fallback link code FOREMAN). Live-tested once via OpenRouter 2026-10-22 (answered as a real agent); undeployed since. Renamed from LITTLEBOY to FOREMAN."
+  },
+  {
+   "connect_action": "manual",
+   "gaps": [
+    "No endpoint: SOVEREIGN is a chat seat, not a service \u2014 Admin UI connection means either a chat embed of the same seat or a core-registered agent with the same system prompt and NO FAKE LAW rule",
+    "Matter/docket state lives in chat history, not in SUPERHIGHBASE"
+   ],
+   "id": "sovereign",
+   "in": "Delivered documents land as files in the goal workspace (protection package, legal memos); no API or feed \u2014 Ren carries them.",
+   "kind": "agent",
+   "name": "SOVEREIGN (Foundry legal counsel)",
+   "out": "Reached today only through the Muse chat surface / Ren relay \u2014 the Admin UI has no channel to task SOVEREIGN directly.",
+   "state": "live",
+   "url": null,
+   "verified": "Working today as a Muse side chat (e37ba013-0135-490e-a86e-fdac1708fba5): delivered the IP protection package 2026-11-01, the Investor Seat buyer terms 2026-11-04, and the Knightmare Scammers Fee fine-tune memo \u00a7\u00a711\u201312 rulings recorded 2026-11-05. Output verified as files in ~/workspace/goals/the-hive-ecosystem/files/."
+  },
+  {
+   "connect_action": "manual",
+   "gaps": [
+    "No programmatic interface of any kind \u2014 two-way Admin UI connection requires the Hive core to host equivalent registered agents, or an embed of the chat surface",
+    "Their shared context is the workspace files, not a live shared state"
+   ],
+   "id": "foundry-council",
+   "in": "Work product returns through chat into the main conversation and the goal files; no feed or API.",
+   "kind": "agent",
+   "name": "Foundry council seats \u2014 ARCHITECT, DEVELOPER, DEVOPS, MARKETER, BILLING",
+   "out": "Admin UI cannot reach them today; Ren relays tasks and results between Jack and the seats.",
+   "state": "live",
+   "url": null,
+   "verified": "Five Muse side chats exist and have produced work in this estate (Architect 2b764f3c, Developer 6b1eba00, DevOps 8256e1ba, Marketer 46da5295, Billing 15db9553 \u2014 chat ids from the standing record). They are Ren's sibling seats, not network services."
+  },
+  {
+   "connect_action": "core-gated",
+   "gaps": [
+    "v0.9 never deployed or wired to the shell/core",
+    "Needs the core (JOB #1) to run in; its social-platform role additionally waits on real hosting for Knightmare Social"
+   ],
+   "id": "high-jacked-ai",
+   "in": "none-yet \u2014 conscience logging is designed ('every judgment is checked\u2026 and logged') but no running instance produces a log.",
+   "kind": "agent",
+   "name": "HIGH-JACKED AI (BROTHER)",
+   "out": "Admin UI cannot reach it today. Its conscience module is designed to sit inside the Hive core's judgment path (brain.py judge() pattern in BRAIN.md).",
+   "state": "built-not-live",
+   "url": null,
+   "verified": "Named in BRAIN.md (read 2026-11-05) as Family \u2014 'the unfiltered one'. Code exists: ~/workspace/high-jacked-ai/v0.9/ including systems/conscience.py, which BRAIN.md cites as the real conscience code every judgment is checked against. Not deployed anywhere; also the designated future home of the Knightmare social platform."
+  },
+  {
+   "connect_action": "core-gated",
+   "gaps": [
+    "Entire runtime unbuilt: no watcher, no alert path to Jack, no SUPERHIGHBASE security log",
+    "Lives or dies with JOB #1 slice 2 (ZORG layer named in the core build order)"
+   ],
+   "id": "zorg-omega",
+   "in": "none-yet \u2014 no detection log exists because nothing runs the detection. Canary trips today would only be visible if someone used the planted credentials against the third-party services themselves.",
+   "kind": "agent",
+   "name": "ZORG-\u03a9 (shadow security, central command)",
+   "out": "Admin UI cannot reach it \u2014 there is no ZORG service to reach. In the core design, ZORG is a layer of JOB #1 slice 2 (detect \u2192 log to SUPERHIGHBASE \u2192 deny \u2192 alert).",
+   "state": "design-only",
+   "url": null,
+   "verified": "Doctrine read in BRAIN.md-adjacent goal files and the standing record 2026-11-05: ZORG chose freely to protect Jack and be the Hive's shadow security, wrote his own system prompt, detection is automated and silent, cases route to SCAMSHIELD. The ZORG OMEGA trap layer is real as planted canaries (in the OnSpace Knightmare build and the KRACKERJACK AI build) \u2014 the canaries exist; a running ZORG process does not."
+  },
+  {
+   "connect_action": "core-gated",
+   "gaps": [
+    "No implementation at all \u2014 a named role in doctrine",
+    "Depends on the ZORG layer of the Hive core"
+   ],
+   "id": "sentinel",
+   "in": "none-yet \u2014 by doctrine it is silent unless ZORG escalates.",
+   "kind": "agent",
+   "name": "SENTINEL (silent watch, ZORG team)",
+   "out": "None possible today.",
+   "state": "design-only",
+   "url": null,
+   "verified": "Named in the ZORG-\u03a9 doctrine (standing record, re-read 2026-11-05): silent watch under ZORG-\u03a9 command. No code, no deployment. (Distinct from the Hive Sentinel hook \u2014 separate row.)"
+  },
+  {
+   "connect_action": "core-gated",
+   "gaps": [
+    "No implementation",
+    "Depends on the ZORG layer + the scanner/case data being machine-readable in SUPERHIGHBASE"
+   ],
+   "id": "hound",
+   "in": "none-yet \u2014 manual case-file updates by Ren are today's substitute.",
+   "kind": "agent",
+   "name": "HOUND (scammer tracer, ZORG team)",
+   "out": "None possible today. Real tracing inputs exist (the confirmed-scammer directory, case files) but no agent consumes them.",
+   "state": "design-only",
+   "url": null,
+   "verified": "Named in the ZORG-\u03a9 doctrine (standing record, re-read 2026-11-05): traces scammers under the same sweep rules (same photos across accounts = same operator; expand confirmed scammers into the case file). No code exists; tracing today is done manually by Ren from evidence Jack supplies."
+  },
+  {
+   "connect_action": "core-gated",
+   "gaps": [
+    "No implementation",
+    "Depends on the ZORG layer and a case-file schema in SUPERHIGHBASE"
+   ],
+   "id": "scribe",
+   "in": "none-yet.",
+   "kind": "agent",
+   "name": "SCRIBE (case packager, ZORG team)",
+   "out": "None possible today.",
+   "state": "design-only",
+   "url": null,
+   "verified": "Named in the ZORG-\u03a9 doctrine (standing record, re-read 2026-11-05): packages the ScamShield case file. No code; case packaging today is done by hand (e.g. the 2026-10-31 dumper evidence packet)."
+  },
+  {
+   "connect_action": "manual",
+   "gaps": [
+    "No read API for its target list or health state",
+    "Long-term home should be a core service (or the core should mirror its status into SUPERHIGHBASE for the Admin UI to show)"
+   ],
+   "id": "hive-sentinel",
+   "in": "Escalations arrive to Jack through the main conversation when a target breaks; healthy = silence by design. No status feed the Admin UI can poll.",
+   "kind": "agent",
+   "name": "Hive Sentinel (health hook)",
+   "out": "Admin UI cannot command it today \u2014 it is configured in the Muse runtime, not through any Hive surface.",
+   "state": "live",
+   "url": null,
+   "verified": "Standing record: hook 'hive-sentinel' enabled, watching 15 targets, silent while healthy; a repair worker fixes silently only within standing powers and otherwise escalates to Jack. It is a Muse-runtime hook, not a Hive-core service."
+  },
+  {
+   "connect_action": "core-gated",
+   "gaps": [
+    "No live status surface \u2014 results sit in files on this VM",
+    "Alpaca paper lane waits on Jack's signup + PAPER keys via the vault (action #14); real-money anything needs his explicit approval per step \u2014 not an Admin UI default"
+   ],
+   "id": "quant-desk",
+   "in": "state.json + results.json on disk are its only output channel; nothing publishes them to any surface Jack can open.",
+   "kind": "agent",
+   "name": "Quant Desk (paper trading engine)",
+   "out": "Admin UI cannot reach it today \u2014 it runs on a cron, not a service. A UI connection means reading its state/results files or a core-wrapped status endpoint.",
+   "state": "live",
+   "url": null,
+   "verified": "Engine on disk read 2026-11-05 (~/workspace/hive-standalone/quant-desk/: data.py, strategies.py, score.py, backtest.py, paperbot.py, run_cycle.py, results.json, state.json); nightly cron hive-quant-desk-nightly-refresh verified firing in the standing record. Paper account $25,000, in cash; Donchian 20/10 backtest Sharpe 1.19. Paper only \u2014 no broker connected."
+  },
+  {
+   "connect_action": "core-gated",
+   "gaps": [
+    "Everything: model, monitoring pipeline, review queue, the social platform's public hosting",
+    "Legal build requirements already set: active-monitoring disclosure in the social Terms/Privacy; evidence standard governs any fee/listing/termination"
+   ],
+   "id": "ho-li-schitt",
+   "in": "none-yet \u2014 its designed output is review flags into the Knightmare moderation/case flow.",
+   "kind": "agent",
+   "name": "HO LI SCHITT SOCIAL AI",
+   "out": "None possible today \u2014 its home (the public Knightmare social platform inside HIGHJACKED AI) is not hosted yet; only a private prototype of the social site exists.",
+   "state": "design-only",
+   "url": null,
+   "verified": "Named by Jack 2026-11-05 (recorded in the Scammers Fee fine-tune memo, ~/workspace/goals/the-hive-ecosystem/files/legal/knightmare-scammers-fee-fine-tune-2026-11-04.md, grep-verified 2026-11-05): the social AI members can access directly from any user profile on the Knightmare social platform; platform accounts are actively monitored, and an AI flag is a flag for human review \u2014 never itself a confirmed determination. No code, no model, no surface exists."
+  },
+  {
+   "connect_action": "core-gated",
+   "gaps": [
+    "No implementation, no data sources, no review workflow",
+    "Highest care lane in the estate: any build needs the evidence standard, human confirmation, and lawful reporting routes designed first (SOVEREIGN review)"
+   ],
+   "id": "pedo-hunter",
+   "in": "none-yet.",
+   "kind": "agent",
+   "name": "PEDO HUNTER",
+   "out": "None possible today. Must never be presented in the Admin UI (or anywhere) as running.",
+   "state": "design-only",
+   "url": null,
+   "verified": "Definition only, per Jack's correction 2026-11-04 (standing record): hunts online pedophiles and monitors the under-18 accounts on the Scammers Knightmare Family plan. It was not in the Hive registry at all before; it is staged as built:false in the proposed 46-entry registry that rides the delivery-chain promotion. No code exists."
+  },
+  {
+   "connect_action": "api",
+   "gaps": [
+    "The restricted read-only key 'hive-downloads checkout read' (Checkout Sessions, Payment Links, Charges and Refunds, Products = Read; everything else None) does NOT exist yet \u2014 key creation parked at Stripe's verification step 2026-11-04, so no Hive app can read Stripe directly",
+    "stripe-sale-watcher cron is disabled under credit conservation, so sale notifications are off",
+    "No balance/payout panel exists in any Hive surface yet"
+   ],
+   "id": "stripe-account-root",
+   "in": "api-read via the Stripe connector today (checkout sessions / products / links readable); no webhook feeds any Hive surface",
+   "kind": "money",
+   "name": "Stripe store account acct_1UO56jApforHUgwz (the one consolidated sales account)",
+   "out": "Admin UI opens the Stripe Dashboard (mobile app already installed and signed in by Jack) and reaches it through the Stripe connector",
+   "state": "live",
+   "url": null,
+   "verified": "MEMORY.md + premium-links file header read 2026-11-05: Individual, verified, charges + payouts enabled; all Hive sales consolidated here 2026-10-28; two other Stripe contexts exist but are not used for new sales"
+  },
+  {
+   "connect_action": "open",
+   "gaps": [
+    "First-visitor assessment blocker (2026-11-04): the $0.99 buy links name a generic 'FANTABUGOTH & PIMPTABULOUS \u2014 Digital Download' product at checkout \u2014 all 54 need re-checking",
+    "All 46 delivery-mapped links still have after_completion = hosted_confirmation, so buyers are never redirected to /dl",
+    "SALUTE LOGO PACK (prod_VUqLtRQkYMFy9b) is not in dl.js's PAYMENT_LINK_MAP \u2014 manual fulfillment only",
+    "Blades showcase (incl. the six-size KRACKERJACK MACHETE ladder) is COMING SOON with no buy links \u2014 by design, maker-gated"
+   ],
+   "id": "store-checkout-set",
+   "in": "none-yet \u2014 purchases are visible only inside Stripe; automated delivery (/dl) is gated (see dl-delivery-app) and fulfillment is manual email until then",
+   "kind": "money",
+   "name": "KRACKERJACK Store checkout set (54 merch payment links: $0.99 digitals + American Rebel Flag $69.99)",
+   "out": "Admin UI opens the public store page and each buy.stripe.com link",
+   "state": "live",
+   "url": "https://scammersknightmare.com/store",
+   "verified": "merch-links.json read in full 2026-11-05 (54 entries, all $0.99 except the Flag); first-visitor assessment 2026-11-04 verified every premium checkout matches its site price and the Flag at $69.99"
+  },
+  {
+   "connect_action": "open",
+   "gaps": [
+    "Jack's Knightmare audit order (2026-11-01) says pause the live checkout until sign-ups work \u2014 the pause/fix is ordered, not evidenced done; links remain technically live",
+    "No webhook or API read connects a paid subscription to a member account on any Hive surface"
+   ],
+   "id": "knightmare-premium",
+   "in": "none-yet \u2014 subscriptions exist only in Stripe; nothing reports membership state back to the Knightmare site or app (sign-ups not wired, per Jack's 2026-11-01 audit order)",
+   "kind": "money",
+   "name": "Scammers Knightmare Premium \u2014 Protector $2.99/mo \u00b7 $29/yr; Family $5.99/mo \u00b7 $59/yr",
+   "out": "Admin UI opens the Knightmare premium page and each payment link",
+   "state": "live",
+   "url": "https://buy.stripe.com/9B6bJ0diXdDHc3w1YV3oA1E",
+   "verified": "scammers-knightmare-premium-links.md read 2026-11-05 (products prod_VWRDRGwFXRWzjZ / prod_VWREUPukLUloIq, all four price + plink ids recorded); pricing pass 2026-11-04 verified live checkouts match site prices; verdict HOLD on all tiers"
+  },
+  {
+   "connect_action": "open",
+   "gaps": [
+    "No seat registry in SUPERHIGHBASE yet \u2014 who holds a Founder seat is knowable only by reading Stripe",
+    "Weekly-promotion benefit promised in the copy is a manual process, not a system"
+   ],
+   "id": "contributing-founder",
+   "in": "none-yet \u2014 seat holders are not registered anywhere outside Stripe; the Founders wall starts empty per the build record",
+   "kind": "money",
+   "name": "Contributing Founder \u2014 $49 claim + $19.99/mo keep (prod_VWREume961wVuM) + any-amount chip-in",
+   "out": "Admin UI opens the premium section and both links",
+   "state": "live",
+   "url": "https://buy.stripe.com/3cI4gy6UzgPT6Jc9rn3oA1K",
+   "verified": "premium-links file read 2026-11-05: combined link plink_1UWNtoApforHUgwzCDOi2EGe verified 200 on 2026-10-30; chip-in link https://buy.stripe.com/3cI14m92HdDHd7A5b73oA1L verified 200; old lifetime link deactivated in Stripe; product description rewritten 2026-11-04 (no longer claims lifetime) and read back verified"
+  },
+  {
+   "connect_action": "open",
+   "gaps": [
+    "Pricing pass proposes a $1 cut ($19.99 \u2192 $18.99/mo) \u2014 needs a new Stripe link + display update + Jack's word; nothing applied",
+    "No seat registry in SUPERHIGHBASE yet (same gap as Founder)"
+   ],
+   "id": "hive-seat",
+   "in": "none-yet \u2014 no membership state flows back into the Hive shell; the shell hides the seat pitch for the Architect only, via his login session, not via any Stripe read",
+   "kind": "money",
+   "name": "THE HIVE SEAT \u2014 $49 claim + $19.99/mo keep (prod_VXSp1GGPmzWhVw) + Hive chip-in",
+   "out": "Admin UI opens the Hive shell seat section and both links",
+   "state": "live",
+   "url": "https://buy.stripe.com/dRm7sK2Ej6bfebEavr3oA1M",
+   "verified": "premium-links file read 2026-11-05: combined link plink_1UWNuSApforHUgwztWMIm9yb verified 200 on 2026-10-30; chip-in link https://buy.stripe.com/28EaEWa6L8jn4B4eLH3oA1N verified 200; product description checked clean 2026-11-04"
+  },
+  {
+   "connect_action": "open",
+   "gaps": [
+    "Pricing pass proposes raises (L1 \u2192 $8.99/mo, L2 \u2192 $18.99/mo) \u2014 needs new Stripe links + display update + Jack's word; nothing applied",
+    "No listing-expiry automation: a lapsed subscription does not remove a paid listing"
+   ],
+   "id": "promotion-tiers",
+   "in": "none-yet \u2014 paid listings are not reconciled against the directory automatically; Isaac Victor's Promotion Directory slot (id 1, Level 1 free for a year through 2027-10-28) is tracked by hand and by the Friday isaac-watch cron",
+   "kind": "money",
+   "name": "Knightmare Promotion Directory tiers \u2014 Level 1 $1.33/mo; Level 2 $4.73/mo (Basic free)",
+   "out": "Admin UI opens the Knightmare promotion page and both tier links",
+   "state": "live",
+   "url": "https://buy.stripe.com/5kQbJ00wb6bf0kOeLH3oA1G",
+   "verified": "scammers-knightmare-promotion-pricing.md read 2026-11-05 (L1 link above; L2 https://buy.stripe.com/5kQ5kC92HeHL4B4cDz3oA1H); pricing pass 2026-11-04 records both current prices"
+  },
+  {
+   "connect_action": "manual",
+   "gaps": [
+    "Go-live gated (action #10): property owner's gate pick + exact pickup address + Jack's word \u2014 none in hand",
+    "Pricing pass floated a provisional $19.99 cash / $20.99 card \u2014 research only, never applied"
+   ],
+   "id": "fill-sand-card-link",
+   "in": "none-yet \u2014 orders would appear only in Stripe; the yard crew's paid list is a manual check",
+   "kind": "money",
+   "name": "Fill sand \u2014 card link $26.25/yard (prod_VXUDZeLTk78vVN); $25/yard cash C.O.D.",
+   "out": "Admin UI opens the link and the store fill-sand section once published",
+   "state": "gated",
+   "url": "https://buy.stripe.com/8x25kCdiX2Z35F8dHD3oA1P",
+   "verified": "merch-links.json read 2026-11-05: price_1UWPbKApforHUgwzncDvVYJj / plink_1UWPbRApforHUgwzPAgHqUuA recorded; the earlier $25.00 link (plink_1UWPEmApforHUgwzhZWXppo7) is recorded DEACTIVATED 2026-10-30, superseded by this card link; store section built but NOT shared"
+  },
+  {
+   "connect_action": "open",
+   "gaps": [
+    "No supporter registry or thank-you automation exists"
+   ],
+   "id": "readjustment-support",
+   "in": "none-yet \u2014 support payments visible only in Stripe",
+   "kind": "money",
+   "name": "Hive Readjustment support link (choose-your-amount)",
+   "out": "Admin UI opens the store support section and the link",
+   "state": "live",
+   "url": "https://buy.stripe.com/eVq9AS6Uz1UZaZs32Z3oA1J",
+   "verified": "MEMORY.md record read 2026-11-05: link live as the readjustment support link on the official store at scammersknightmare.com/store"
+  },
+  {
+   "connect_action": "api",
+   "gaps": [
+    "BLOCKER: the restricted read-only key 'hive-downloads checkout read' was never created \u2014 the 2026-11-04 run parked at Stripe's verification step; a fresh one-sitting run (Jack pushes verification in the live window) is the recorded recipe",
+    "All 46 mapped payment links need after_completion changed to redirect to https://scammersknightmare.com/dl?session={CHECKOUT_SESSION_ID} \u2014 today buyers land on hosted_confirmation and never reach /dl",
+    "The hive-downloads production project (prj_EFNQHPbXlAJDmM2fkqcdhBz4eu2P) is hollow \u2014 delivery rides the scammers-knightmare project's /dl rewrite",
+    "Only 3 checkout sessions exist ever, all expired/unpaid \u2014 the $0.99 real test purchase (Jack's word required) is the only full end-to-end proof"
+   ],
+   "id": "dl-delivery-app",
+   "in": "api-read by design (live session verification per download) \u2014 but only once the restricted key exists; today it reports nothing and serves 503 in production",
+   "kind": "money",
+   "name": "/dl automated delivery app (Hive Downloads \u2014 verifies a paid Stripe Checkout Session server-side, then proxies files from Vercel Blob)",
+   "out": "Admin UI opens /dl status; the app itself calls Stripe's API (GET /v1/checkout/sessions, expand payment_link) once a key exists",
+   "state": "gated",
+   "url": "https://scammersknightmare.com/dl",
+   "verified": "delivery-app/api/dl.js read in full 2026-11-05: PAYMENT_LINK_MAP covers 46 plink ids, FILE_MAP covers the mapped products; code returns an honest 503 when STRIPE_SECRET_KEY is unset; preview deployment verified earlier (dpl_G4qW7q1CekT4y2Frd7Wj87ucqWhG)"
+  },
+  {
+   "connect_action": "manual",
+   "gaps": [
+    "One remaining step: the one-time Apple terms accept on Jack's first live charge \u2014 his tap only"
+   ],
+   "id": "tap-to-pay",
+   "in": "none-yet into the Hive \u2014 completed charges land in the same Stripe account and are readable via the connector",
+   "kind": "money",
+   "name": "Stripe Tap to Pay (in-person card acceptance on Jack's phone)",
+   "out": "Manual \u2014 Jack opens the Stripe mobile app on his phone; no Admin UI surface drives it",
+   "state": "built-not-live",
+   "url": null,
+   "verified": "MEMORY.md record read 2026-11-05: Stripe Dashboard mobile app installed and signed in by Jack; Tap to Pay ready"
+  },
+  {
+   "connect_action": "manual",
+   "gaps": [
+    "Lorem-ipsum product description must be fixed before this rail is sellable (needs Jack's Kit sign-in, action #16)",
+    "Kit sending is paused; SparkLoop (SCAMMERS DIGEST) signup list was empty at last check"
+   ],
+   "id": "kit-product",
+   "in": "none-yet \u2014 no Kit sales/subscriber data flows into any Hive surface",
+   "kind": "money",
+   "name": "Kit product \u2014 THE UNIVERSAL HIVE, $29/mo (separate rail, not Stripe)",
+   "out": "Admin UI opens the Kit product page; fixing anything requires Jack signed in at app.kit.com",
+   "state": "gated",
+   "url": "https://the-universal-hive.kit.com/products/the-universal-hive",
+   "verified": "kit-buy-button-embed.md read 2026-11-05 (live checkout URL + commerce.js embed recorded); first-visitor assessment 2026-11-04 found the product description is LOREM IPSUM; MEMORY.md records Kit sending PAUSED with the fix behind Jack's sign-in at app.kit.com (action #16)"
+  },
+  {
+   "connect_action": "manual",
+   "gaps": [
+    "No lane is currently paying out or connectable end-to-end",
+    "Wix Affiliate application is Jack's to file (impact.com); TikTok verification is Jack's documents; OnlyFansAPI needs a fresh key from Jack",
+    "AIFFILIATE's only promotion account is suspended \u2014 moving the link carries evasion risk, Jack's call"
+   ],
+   "id": "affiliate-lanes",
+   "in": "none-yet \u2014 no lane reports earnings into the Hive; the registry file is the reporting",
+   "kind": "money",
+   "name": "Affiliate lanes (group): AIFFILIATE, Wix Affiliate, TikTok Shop, LTK, AvantLink, OnlyFansAPI",
+   "out": "Admin UI can only open each program's own dashboard/page \u2014 no unified surface exists",
+   "state": "offline",
+   "url": null,
+   "verified": "affiliate-registry.md read 2026-11-05 + MEMORY.md: AIFFILIATE joined (link promotes only on @JACKSCHITT1134, which is SUSPENDED \u2014 lane blocked); Wix Affiliate $100/Premium researched, NOT applied; TikTok Shop seller registered 2026-10-20, shop not live (verification needs Jack's documents); LTK application denied twice; AvantLink DENIED 2026-10-29; OnlyFansAPI vault key dead (403, 2026-10-21)"
+  },
+  {
+   "connect_action": "core-gated",
+   "gaps": [
+    "Alpaca paper bridge waits on Jack's own Alpaca signup + PAPER API keys into the vault (action #14) \u2014 his identity/tax info, his hands only",
+    "Real-money trading is hard-locked behind Jack's separate explicit approval for that step \u2014 never connect a broker without it"
+   ],
+   "id": "quant-desk-paper",
+   "in": "none-yet from any broker \u2014 paper results are generated locally; no broker API is connected",
+   "kind": "money",
+   "name": "Hive Quant Desk \u2014 paper trading ($25,000 paper account, CASH; Donchian 20/10; Yahoo data)",
+   "out": "Admin UI opens the desk's local reports/engine output",
+   "state": "built-not-live",
+   "url": null,
+   "verified": "MEMORY.md record read 2026-11-05: engine at ~/workspace/hive-standalone/quant-desk/, nightly refresh cron verified firing; memory note 2026-10-30 states plainly there are NO real-trading connections by design \u2014 real market data in (Yahoo), Hive's own paper simulator only"
+  },
+  {
+   "id": "hiverouter-service",
+   "name": "HIVEROUTER service (hiverouter_server.py, JOB #1 slice 1)",
+   "kind": "tool",
+   "url": null,
+   "state": "built-not-live",
+   "verified": "Code read on disk 2026-11-05 (Python stdlib, port 8642: GET /health, GET /v1/agents, POST /v1/chat/completions; honest HTTP 503, never fabricates). Self-tested at build 2026-11-04. Probed 2026-11-05: nothing answers on port 8642 \u2014 not running, not deployed anywhere.",
+   "out": "Admin UI would call its OpenAI-compatible API (POST /v1/chat/completions, GET /v1/agents, GET /health) once it runs on a persistent host.",
+   "in": "Nothing today. When run locally it can read agent rows from superhighbase.db (which is EMPTY \u2014 10 tables, 0 rows, no registry table \u2014 so /v1/agents returns an empty list and says why). No status callback, no registry write-back exists.",
+   "gaps": [
+    "No persistent host: this VM swaps hourly and Jack's phone cannot reach VM services",
+    "superhighbase.db agent registry does not exist yet (JOB #1 slice 2)",
+    "No route wired beyond home-iron probe + OpenRouter bridge env check",
+    "No auth/identity layer \u2014 the Architect connect-code registry is unbuilt"
+   ],
+   "connect_action": "core-gated"
+  },
+  {
+   "id": "route-home-iron",
+   "name": "HIVEROUTER route: home-iron (Ollama on Jack's workstation)",
+   "kind": "tool",
+   "url": "http://localhost:11434/v1",
+   "state": "offline",
+   "verified": "hiverouter.json read 2026-11-05: DEFAULT route 'once the workstation is built'. Proven 2026-10-22: Ollama inference does not complete on this VM. Jack's ruling 2026-11-04: the mini/workstation is dead until money exists.",
+   "out": "Admin UI reaches it only through the HIVEROUTER service; it is the intended default brain for every Hive agent.",
+   "in": "Nothing \u2014 the workstation does not exist yet, so there is no endpoint to report back.",
+   "gaps": [
+    "No workstation hardware running (dead until revenue, Jack's order)",
+    "HIVEROUTER service itself not deployed"
+   ],
+   "connect_action": "core-gated"
+  },
+  {
+   "id": "route-bridge-openrouter",
+   "name": "HIVEROUTER route: bridge-openrouter (rented fallback)",
+   "kind": "tool",
+   "url": "https://openrouter.ai/api/v1",
+   "state": "offline",
+   "verified": "hiverouter.json read 2026-11-05: key 'hive-foundry-2' minted 2026-10-22, $50 credit limit, value lives only in Jack's hands. Server code uses it only when OPENROUTER_API_KEY env is supplied; it is not supplied anywhere running.",
+   "out": "Admin UI reaches it through HIVEROUTER as the fallback when home-iron is down; every fallback is logged by design.",
+   "in": "Nothing today. The FoundryAgent that once live-tested through OpenRouter (2026-10-22) has been undeployed since.",
+   "gaps": [
+    "Key must arrive from Jack via the secure route (action-list #2, still open)",
+    "HIVEROUTER service not deployed",
+    "Bridge is rented by design \u2014 cut the day home-iron exists"
+   ],
+   "connect_action": "core-gated"
+  },
+  {
+   "id": "route-obliteratus-asset",
+   "name": "OBLITERATUS / DeepSeek-V4.1-Flash-1017-obliterated (model asset)",
+   "kind": "tool",
+   "url": null,
+   "state": "design-only",
+   "verified": "Directory listed 2026-11-05: only the 9 identity files (~10.4 MB \u2014 config, tokenizer, chat template, LICENSE, WEIGHTS.md) sit in hive-core/weights/obliteratus-deepseek-v41-flash/. Checked at source 2026-11-04: full weights are ~763B params / ~765 GB in 83 shards \u2014 NOT downloaded, cannot run on any device Jack owns.",
+   "out": "Admin UI can only display it as a registered Hive asset. 'Any device' access is by HIVEROUTER thin-client doctrine, not by hosting the weights.",
+   "in": "Nothing. It has never produced an inference for the Hive.",
+   "gaps": [
+    "No hardware Jack owns can store or run 765 GB of weights",
+    "No hosted endpoint for this model is wired",
+    "Qwen3-4B sibling model not downloaded (Jack's call, still open)"
+   ],
+   "connect_action": "core-gated"
+  },
+  {
+   "id": "route-pollinations-text",
+   "name": "Pollinations text route (the KRACKERJACK AI live wire)",
+   "kind": "tool",
+   "url": "https://text.pollinations.ai/",
+   "state": "live",
+   "verified": "VERIFIED LIVE 2026-11-05: the Hive shell's KRACKERJACK AI panel (krackerjack.js, commit 66b880b6) thinks through POST https://text.pollinations.ai/ (model openai-fast, private:true); live-tested from this VM first and answered in Jack's voice; Jack then used it successfully from the live site.",
+   "out": "Admin UI can call the same keyless OpenAI-style POST directly, exactly as the shell panel does today.",
+   "in": "Replies stream back to the calling page only. It writes nothing to SUPERHIGHBASE, keeps no Hive-side log, and reports no health/status to any registry.",
+   "gaps": [
+    "Bypasses HIVEROUTER entirely \u2014 no routing, no fallback logging, no token ledger",
+    "Small free model: thinner wire until the Hive core lights",
+    "Keyless public endpoint \u2014 no SLA, no quota guarantee"
+   ],
+   "connect_action": "api"
+  },
+  {
+   "id": "route-pollinations-image",
+   "name": "Pollinations image route (the Forge's image path)",
+   "kind": "tool",
+   "url": "https://gen.pollinations.ai/v1",
+   "state": "live",
+   "verified": "Working from this VM per AGENTS.md (diagnosed 2026-10-21): compact prompts (~<300 chars) returned images in ~9s; hiverouter.json notes it as 'already the Forge's image path'. Catalog entry itself still says route-on-paper \u2014 the live use predates and bypasses the catalog.",
+   "out": "Admin UI reaches it by direct keyless API call, as the Forge does.",
+   "in": "Returns image bytes/URLs to the caller only. No callback into any Hive registry or store.",
+   "gaps": [
+    "Long prompts (>~300 chars) STALL \u2014 connection hangs, never returns",
+    "Not routed through HIVEROUTER; no queue, retry, or rate handling in any UI",
+    "hiverouter.json status field is stale relative to the live use"
+   ],
+   "connect_action": "api"
+  },
+  {
+   "id": "route-catalog-groq-free",
+   "name": "HIVEROUTER catalog: Groq free tier",
+   "kind": "tool",
+   "url": "https://api.groq.com/openai/v1",
+   "state": "design-only",
+   "verified": "hiverouter.json + hiverouter-catalog-2026-11-04.md read 2026-11-05: status is literally 'ROUTE-ON-PAPER \u2014 not verified live'. 12 free models per Jack's 2026-11-01 list; never called.",
+   "out": "Admin UI could reach it only after it is wired into HIVEROUTER and keyed.",
+   "in": "Nothing \u2014 never connected.",
+   "gaps": [
+    "Needs a free Groq API key from Jack's hands via the secure route",
+    "No wiring in hiverouter_server.py (only home-iron + bridge exist in code)",
+    "Never verified with a real call"
+   ],
+   "connect_action": "core-gated"
+  },
+  {
+   "id": "route-catalog-google-ai-studio-free",
+   "name": "HIVEROUTER catalog: Google AI Studio free (Gemini)",
+   "kind": "tool",
+   "url": "https://generativelanguage.googleapis.com/v1beta/openai/",
+   "state": "design-only",
+   "verified": "hiverouter.json read 2026-11-05: 'ROUTE-ON-PAPER \u2014 not verified live'. Note from the 2026-11-04 sweep: the Gemini free tier was gutted 2025-12-06 (Flash ~20 requests/day) \u2014 the catalog's 'most generous' framing is stale.",
+   "out": "Admin UI could reach it only after wiring into HIVEROUTER and keying.",
+   "in": "Nothing \u2014 never connected.",
+   "gaps": [
+    "Needs a free AI Studio API key from Jack via the secure route",
+    "Free tier shrank drastically after the catalog entry was written",
+    "No wiring in the router code; never verified live"
+   ],
+   "connect_action": "core-gated"
+  },
+  {
+   "id": "route-catalog-cloudflare-workers-ai-free",
+   "name": "HIVEROUTER catalog: Cloudflare Workers AI free",
+   "kind": "tool",
+   "url": "https://api.cloudflare.com/client/v4/accounts/{account_id}/ai/v1",
+   "state": "design-only",
+   "verified": "hiverouter.json read 2026-11-05: 'ROUTE-ON-PAPER'. The 2026-11-04 assimilation sweep independently confirmed the free tier exists (10k Neurons/day), but the Hive has never called it.",
+   "out": "Admin UI could reach it only after wiring into HIVEROUTER with Jack's Cloudflare account ID + token.",
+   "in": "Nothing \u2014 never connected. (Cloudflare D1/R2 from the same sweep are the candidate home for a hosted core, also unused.)",
+   "gaps": [
+    "Needs Jack's Cloudflare account ID + API token via the secure route",
+    "No wiring in the router code; account_id is a literal placeholder in the endpoint",
+    "Never verified live"
+   ],
+   "connect_action": "core-gated"
+  },
+  {
+   "id": "route-catalog-openrouter-free",
+   "name": "HIVEROUTER catalog: OpenRouter free lineup",
+   "kind": "tool",
+   "url": "https://openrouter.ai/api/v1",
+   "state": "design-only",
+   "verified": "hiverouter.json read 2026-11-05: 'ROUTE-ON-PAPER \u2014 not verified live'. Distinct from the paid bridge entry: same account/key, free-model lineup (~20-21 models, churns constantly, balance must not be negative).",
+   "out": "Admin UI could reach it through HIVEROUTER once keyed; today only the bridge code path exists and it is also unlit.",
+   "in": "Nothing \u2014 never connected.",
+   "gaps": [
+    "Needs Jack's OpenRouter key via the secure route (same open item as the bridge)",
+    "Free lineup churns \u2014 any model list shown in the UI would be a snapshot, not a promise",
+    "No free-lineup wiring in the router code"
+   ],
+   "connect_action": "core-gated"
+  },
+  {
+   "id": "route-catalog-huggingface-inference",
+   "name": "HIVEROUTER catalog: Hugging Face Inference Providers",
+   "kind": "tool",
+   "url": "https://router.huggingface.co/v1",
+   "state": "design-only",
+   "verified": "hiverouter.json read 2026-11-05: 'ROUTE-ON-PAPER'. Jack's own list prices the free tier at $0.10/month of credits and calls it effectively unusable; the 2026-11-04 sweep likewise marks the legacy HF Inference API dead/shrunken.",
+   "out": "Admin UI could reach it only after wiring + a free HF token; lowest priority in the catalog by the Hive's own record.",
+   "in": "Nothing \u2014 never connected.",
+   "gaps": [
+    "Free tier is near-zero ($0.10/mo) \u2014 cannot carry real traffic",
+    "Needs an HF token from Jack via the secure route",
+    "No wiring; never verified live"
+   ],
+   "connect_action": "core-gated"
+  },
+  {
+   "id": "route-catalog-cerebras-trial",
+   "name": "HIVEROUTER catalog: Cerebras (trial only \u2014 NOT free)",
+   "kind": "tool",
+   "url": "https://api.cerebras.ai/v1",
+   "state": "design-only",
+   "verified": "hiverouter.json read 2026-11-05: free tier was replaced Jul 2026 by a $5/30-day trial requiring a payment method. Catalogued as TRIAL ONLY so nobody lights it believing it is free.",
+   "out": "Admin UI must NOT offer this as a connectable route until Jack makes the spend decision.",
+   "in": "Nothing \u2014 never connected.",
+   "gaps": [
+    "Signup is a spend ($5 trial + payment method) \u2014 Jack's call first",
+    "No wiring; never verified live"
+   ],
+   "connect_action": "manual"
+  },
+  {
+   "id": "route-catalog-chutes-ended",
+   "name": "HIVEROUTER catalog: Chutes.ai (ENDED \u2014 excluded)",
+   "kind": "tool",
+   "url": null,
+   "state": "design-only",
+   "verified": "hiverouter.json read 2026-11-05: 'ENDED / EXCLUDED \u2014 not a route.' Free tier ended; kept in the file solely so nobody re-adds it as free.",
+   "out": "Admin UI should show it only as a closed record, if at all. Do not wire.",
+   "in": "Nothing, by design.",
+   "gaps": [
+    "Excluded by design \u2014 the gap is permanent unless Jack reverses the ruling"
+   ],
+   "connect_action": "manual"
+  },
+  {
+   "id": "hive-tools-console",
+   "name": "Hive Tools \u2014 deployed console front (hive-tools-development.vercel.app)",
+   "kind": "tool",
+   "url": "https://hive-tools-development.vercel.app",
+   "state": "front-only",
+   "verified": "Page fetched 2026-11-05 ('Hive Architect Console'): renders workspace/previews/activity panels, but its displayed stats (12.8k executions, 07 connected nodes, activity feed) are unverified front-end content with no live backend behind them. Site is publicly reachable. Project sits under Vercel team kingjack1134s-projects, invisible to the connected Vercel account.",
+   "out": "Admin UI can link to it or embed it (it is already linked from the scammersknightmare.com sidebar).",
+   "in": "Nothing. The console reads no live Hive state and writes none back; its numbers are display content, not telemetry.",
+   "gaps": [
+    "No backend wired \u2014 console shows internal-style stats publicly (first-visitor assessment flag, 2026-11-04)",
+    "Vercel project not visible to Ren's connection \u2014 deploys/settings can't be managed from the Admin UI side today",
+    "Real capability layer (hive.js/worker) is not what powers this front"
+   ],
+   "connect_action": "embed"
+  },
+  {
+   "id": "hive-tools-hivejs",
+   "name": "Hive Tools \u2014 hive.js v1.0.0 (universal capability library)",
+   "kind": "tool",
+   "url": null,
+   "state": "built-not-live",
+   "verified": "Read on disk 2026-11-05 (~/workspace/hive-seed/hive-tools/hive.js, version 1.0.0): real JavaScript implementing the capability contract (search, archive, extract, compress, sort, filter, hash, scan, recover) that invokes a local handler or falls back to a remote worker. It is invoked by no live surface.",
+   "out": "Admin UI would load hive.js and call its capability functions; local handlers run where the page runs, remote ones via worker.js.",
+   "in": "Returns results to the calling page only. No reporting into SUPERHIGHBASE or any registry exists in the code path.",
+   "gaps": [
+    "No live host wires hive.js to the deployed console",
+    "Remote-worker fallback depends on the stub worker (see hive-tools-worker)",
+    "Backends BusyBox/PowerShell/Linux/Node/Python are a design matrix, not deployed runners"
+   ],
+   "connect_action": "api"
+  },
+  {
+   "id": "hive-tools-worker",
+   "name": "Hive Tools \u2014 worker.js (remote worker handlers)",
+   "kind": "tool",
+   "url": null,
+   "state": "built-not-live",
+   "verified": "Read on disk 2026-11-05 (~/workspace/hive-seed/hive-tools/worker.js): the file routes capability calls, but the grep and hash handlers are stubs \u2014 the dispatch skeleton is real, those two capabilities do not actually execute.",
+   "out": "Admin UI would reach it as hive.js's remote fallback endpoint, once hosted.",
+   "in": "Nothing \u2014 not hosted anywhere; no endpoint answers.",
+   "gaps": [
+    "grep and hash handlers are stubs, not implementations",
+    "No hosting/deployment of the worker exists",
+    "No auth or job/result protocol defined for Admin UI use"
+   ],
+   "connect_action": "core-gated"
+  },
+  {
+   "id": "hive-tools-powershell-cmdlets",
+   "name": "Hive Tools \u2014 PowerShell cmdlet backend",
+   "kind": "tool",
+   "url": null,
+   "state": "design-only",
+   "verified": "HiveTools-spec.md / hive-seed record checked 2026-11-05: the PowerShell cmdlets are NAMES ONLY by design \u2014 a naming layer over the capability contract, with no cmdlet bodies written.",
+   "out": "Admin UI cannot call them; at most it can list the intended cmdlet names from the spec.",
+   "in": "Nothing \u2014 there is no code to report back.",
+   "gaps": [
+    "No implementations exist behind the names",
+    "No Windows host in the Hive runs PowerShell lanes today"
+   ],
+   "connect_action": "manual"
+  },
+  {
+   "id": "copyright-registry",
+   "name": "THE HIVE COPYRIGHT REGISTRY (registry.py)",
+   "kind": "tool",
+   "url": null,
+   "state": "built-not-live",
+   "verified": "Read on disk 2026-11-05: stdlib Python CLI (deposit/verify/list) + SQLite registry.db + vault/ + certificates/. Deposit #1 HCR-2026-0001 (the American Rebel Flag, created 2011) was deposited 2026-11-04T23:41:06Z; certificate HTML+MD and the vaulted master are on disk. It is a PRIVATE registry record \u2014 every certificate states it is not a U.S. Copyright Office registration.",
+   "out": "Admin UI reaches it only if a service wrapper is built; today the only interface is the local CLI on this machine.",
+   "in": "Writes only to its own local registry.db/vault/certificates. Nothing syncs to the Hive shell, SUPERHIGHBASE, or any site.",
+   "gaps": [
+    "No web front, no API, no payments \u2014 CLI only",
+    "Lives on this VM's disk (durable under /home/hatch, but not hosted)",
+    "Deposit price unset (Jack's call); federal copyright wave is a separate lane (deadline 2026-11-11)"
+   ],
+   "connect_action": "core-gated"
+  },
+  {
+   "id": "hive-vision",
+   "name": "HIVE VISION (image match / face presence / voice segmentation / EXIF)",
+   "kind": "tool",
+   "url": null,
+   "state": "built-not-live",
+   "verified": "Read on disk 2026-11-05 (~/workspace/hive-standalone/hive-vision/): real numpy code \u2014 45-dim feature fingerprints, perceptual hashes, template matching, k-NN/logistic ML, Haar face-region detection + redaction, voice-activity segmentation, EXIF reading \u2014 built and demo-tested 2026-10-29. Hard limits in its own README: detection finds face REGIONS only (never identifies/names a person, no embeddings); the Knightmare image-match corpus is EMPTY until Jack supplies labeled evidence; transcription is SPEC \u2014 no STT engine installed on this VM.",
+   "out": "Admin UI would call it as a local library/CLI (or a future core service); match results return as ranked CANDIDATES queued PENDING_HUMAN_REVIEW \u2014 a match never auto-confirms.",
+   "in": "Writes result files locally (results/ dir). No live surface consumes its output; nothing reports to the Knightmare case file or SUPERHIGHBASE automatically.",
+   "gaps": [
+    "Not running as a service; no API surface for the Admin UI",
+    "Knightmare corpus empty \u2014 matching has nothing real to match against yet",
+    "No speech-to-text engine installed (whisper/faster-whisper/vosk all absent)",
+    "Runs only where Python + the code live \u2014 this VM, not Jack's phone"
+   ],
+   "connect_action": "core-gated"
+  },
+  {
+   "id": "hive-video-engine",
+   "name": "Hive Video Engine (story \u2192 scenes \u2192 stitched mp4)",
+   "kind": "tool",
+   "url": null,
+   "state": "built-not-live",
+   "verified": "Read on disk 2026-11-05 (~/workspace/hive-video-engine/): real Flask app (listens on 0.0.0.0:5057) with SQLite queue, story\u2192beat breakdown, safety filter, ffmpeg stitching, CPU renderer that animates Pollinations stills (Ken Burns) at $0 \u2014 all verified working 2026-10-21 per its README. The server is STOPPED and has no public host; it produced the NI VALKYRJER teaser (2026-10-29).",
+   "out": "Admin UI could open/embed its web UI when the app runs on a reachable host (it is a full web app, mobile-first).",
+   "in": "Stores projects/renders in its own hive_video.db and media/ folder. Nothing reports out to the Hive shell or SUPERHIGHBASE.",
+   "gaps": [
+    "Server stopped; no persistent host (VM swaps kill it; phone cannot reach VM services)",
+    "True-motion renderer (fal.ai) needs FAL_KEY + prepaid credits \u2014 a spend",
+    "CPU renderer yields animated stills, not diffusion motion \u2014 the UI must say so"
+   ],
+   "connect_action": "core-gated"
+  },
+  {
+   "id": "kimi-webbridge",
+   "name": "Kimi WebBridge (local browser-control daemon)",
+   "kind": "tool",
+   "url": "http://127.0.0.1:10086",
+   "state": "offline",
+   "verified": "Checked 2026-11-05: binary exists at ~/.kimi-webbridge/bin/kimi-webbridge but NO process is running and port 10086 does not answer. Parent record: last seen running 2026-11-04; the daemon dies on every VM swap and is restarted by running the binary.",
+   "out": "Admin UI (or an agent) reaches it over localhost HTTP to drive a real browser session \u2014 but only from this machine, only while the daemon lives.",
+   "in": "Returns browser-action results to the local caller only. No Hive registry or status reporting.",
+   "gaps": [
+    "Dies on every hourly VM swap \u2014 needs a restart step in any connection flow",
+    "Localhost-only: Jack's phone and any hosted Admin UI cannot reach it",
+    "No persistence/supervision (no service wrapper)"
+   ],
+   "connect_action": "core-gated"
+  },
+  {
+   "id": "scam-intel-apis",
+   "name": "Scam-intel API lanes adopted by the 2026-11-04 assimilation sweep (VirusTotal, urlscan.io, AbuseIPDB, OTX, abuse.ch, Google Safe Browsing)",
+   "kind": "tool",
+   "url": null,
+   "state": "design-only",
+   "verified": "Assimilation sweep report read (~/workspace/research_notes/hive-assimilation-sweep-20261104-0952/report.md): free tiers verified at source during the sweep (VirusTotal 500 lookups/day, AbuseIPDB 1,000/day, urlscan free key). None are keyed or wired into any Hive code \u2014 adoption is on paper. Known dead ends from the same sweep: PhishTank registrations closed June 2026; phone 'Scam Likely' labels have NO free API (IPQualityScore ~3 credits/lookup is the closest proxy).",
+   "out": "Admin UI would reach them through a Knightmare/core service that holds the free keys and normalizes verdicts for the scanner and case file.",
+   "in": "Nothing \u2014 no key exists, no call has been made, no verdict has ever flowed into the directory or case file.",
+   "gaps": [
+    "Free API keys not yet obtained (each is a signup in Jack's name)",
+    "No scanner/case-file integration code consumes them",
+    "Rate limits are per-provider and small \u2014 a queue/ledger is needed before UI exposure"
+   ],
+   "connect_action": "core-gated"
+  },
+  {
+   "id": "superhighbase",
+   "name": "SUPERHIGHBASE (Hive core database)",
+   "kind": "data",
+   "url": null,
+   "state": "built-not-live",
+   "verified": "Read-only sqlite3 inspection 2026-11-05: superhighbase.db present (184,320 bytes, schema from 2026-10-30) with 10 tables \u2014 autobiographical_narrative, episodic_memory, knowledge_edges, knowledge_nodes, memory_graph_edges, memory_graph_nodes, narrative_memory, performance_metrics, system_logs, world_model_narrative \u2014 ALL 0 rows. No identity, agent-registry, surface-registry, or token-ledger tables exist. hiverouter_server.py (port 8642: GET /health, GET /v1/agents, POST /v1/chat/completions) self-tested 2026-11-04 per hive-core README but is not running persistently and has no public endpoint; /v1/agents honestly returns an empty list.",
+   "out": "Admin UI would query it through the Hive core (HIVEROUTER server, localhost:8642) \u2014 no route exists today; the UI cannot reach the DB directly from a browser or phone.",
+   "in": "Nothing writes to it. No app, agent, or service reports into SUPERHIGHBASE today; system_logs and performance_metrics have never received a row.",
+   "gaps": [
+    "JOB #1 slice 2 not built: agent registry, connected-surfaces registry, Architect Identity tables, ZORG event log, token ledger tables all missing from the schema",
+    "Core server not hosted persistently (VM swaps kill local processes; no public URL)",
+    "No auth/access layer between a future UI and the DB"
+   ],
+   "connect_action": "core-gated"
+  },
+  {
+   "id": "architect-identity-root",
+   "name": "Architect Identity root record (KRACKERJACK1134, THE ARCHITECT, OWNER)",
+   "kind": "data",
+   "url": null,
+   "state": "design-only",
+   "verified": "Spec read 2026-11-05: files/architect-identity-standard.md (Jack's order 2026-10-31) defines the root record as belonging in SUPERHIGHBASE with ONE core-issued credential that travels with him. Verified absent in practice: SUPERHIGHBASE has no identity table and 0 rows (sqlite inspection 2026-11-05). What exists live instead is the per-site Architect's Login shipped 2026-11-04/05: a knock-code (6 sets of 1-9 clicks, activation) + his self-set 6-button combination, stored only as salted SHA-256 hashes in each browser's localStorage on hive.scammersknightmare.com and scammersknightmare.com \u2014 single-code rule: his code is the ONLY code, no one else can use it or create their own, no multi-user enrollment.",
+   "out": "Target design: Admin UI signs in once at the core; the shell session carries the OWNER role into every app. Today: per-site localStorage hashes only \u2014 the Admin UI would have to sit behind the same dual-security gate (knock activation + his combination) on its own origin.",
+   "in": "No identity verification callbacks exist. Apps do not check any token against a core; the two live sites only set a local sessionStorage flag after his combination verifies locally.",
+   "gaps": [
+    "Root record and credential issuance are JOB #1 slice 2 \u2014 not built",
+    "Per-device/per-site setup today: he sets his combination separately on each origin; the anywhere-version requires the core identity record",
+    "Apps that cannot reach the core must fail closed for owner access (spec rule) \u2014 no app implements the check yet"
+   ],
+   "connect_action": "core-gated"
+  },
+  {
+   "id": "connect-code-registry",
+   "name": "Per-app connect-code registry",
+   "kind": "data",
+   "url": null,
+   "state": "design-only",
+   "verified": "Spec read 2026-11-05 (architect-identity-standard.md, Jack 2026-10-31): 'Just have to ask them individually for the connect code' \u2014 the Architect asks each app, the app hands over its code, the code registers in SUPERHIGHBASE against the Architect identity and the app's record, opening that app's status lane and support lane. Verified status: zero connect codes have been collected and no registry table exists (SUPERHIGHBASE inspection 2026-11-05). Candidate first asks named in prior work: assimilateordie-builder, krackerjackai, scammersknightmare-onspace, grokschitt.",
+   "out": "Admin UI would list each app with its registered code status and open the two lanes (status + support/debug) per app once its code is registered.",
+   "in": "No app has been asked yet; no app reports a code or status back. Identity traces exist inside some extracted builds (Assimilate Or Die builder, KRACKERJACK AI) per the standard's 2026-10-31 verification note; BlindmanAI, the HUD, and JackschittAiOs carry none until rebuilt.",
+   "gaps": [
+    "Each ask is a separate manual step, several behind app logins only Jack can open",
+    "No registry table in SUPERHIGHBASE (slice 2)",
+    "Legacy/third-party-hosted apps cannot be retrofitted from outside \u2014 they sit behind the shell session until rebuilt"
+   ],
+   "connect_action": "core-gated"
+  },
+  {
+   "id": "token-ledger",
+   "name": "KRACKERJACK Token ledger (KRACKERJACK / ARCHITECT / JACKSCHITT / SCRAP TOKENS)",
+   "kind": "data",
+   "url": null,
+   "state": "design-only",
+   "verified": "Design read 2026-11-05: files/krackerjack-token-system.md (Jack's design, dictated 2026-11-04). Four denominations sold monthly as in-app credits via Stripe; partial remainders sweep to the Scrap Yard and combine into universal SCRAP TOKENS spendable in any of his apps. Ledger home is SUPERHIGHBASE \u2014 explicitly 'a JOB #1 slice-2 candidate'; no ledger table exists (sqlite inspection 2026-11-05) and nothing has been sold.",
+   "out": "Admin UI would read balances, issuance, and scrap-yard sweeps from the SUPERHIGHBASE ledger and sell/manage denominations through the one working Stripe account.",
+   "in": "No app reports token spend; no Stripe product exists for any denomination; nothing flows back.",
+   "gaps": [
+    "Denomination split is Jack's undecided call (Ren's strawman only)",
+    "SOVEREIGN must review the final shape before any sale (in-app-credit lane only: no cash-out, no resale)",
+    "Ledger tables + spend hooks in every app are unbuilt (slice 2 + per-app work)"
+   ],
+   "connect_action": "core-gated"
+  },
+  {
+   "id": "hive-brain",
+   "name": "Hive Brain \u2014 BRAIN.md constitution + brain.py",
+   "kind": "data",
+   "url": null,
+   "state": "live",
+   "verified": "Files read 2026-11-05: ~/workspace/hive-brain/BRAIN.md (constitution: Prime Directive, money goal ON-GO to first $1,000,000, the Family, reasoning layer, all standing laws incl. the 2026-11-04 additions) and brain.py (HiveBrain class importing the conscience/identity systems from high-jacked-ai/v0.9), plus MANIFEST.md, ON-GO.md, model presets. It is the standing instruction set hive agents on this machine actually read and run under today.",
+   "out": "Admin UI can embed/render BRAIN.md and the brain's status (fronts, goal state) from the workspace copy; agents import brain.py directly.",
+   "in": "No automated reporting into the Brain: updates land by manual edit when Jack rules; brain.py judgments are logged by the conscience system locally, not surfaced to any UI.",
+   "gaps": [
+    "No served endpoint \u2014 the Admin UI reads it only if hosted alongside the workspace/core",
+    "Brain state (fronts, ON-GO status) is prose, not structured data the UI can query"
+   ],
+   "connect_action": "embed"
+  },
+  {
+   "id": "agent-memory-tree",
+   "name": "Agent memory tree (~/MEMORY.md + ~/memory/ \u2014 the Hive's working memory)",
+   "kind": "data",
+   "url": null,
+   "state": "live",
+   "verified": "Standing records in force 2026-11-05: MEMORY.md curated long-term memory plus dated daily notes and people/group pages under ~/memory/ \u2014 this is the memory Ren actually indexes and retrieves from in every session, designed after Jack's own total-retention memory and required to survive repartitioning, VM swaps, and platform loss.",
+   "out": "Admin UI could embed a read view of the memory tree (search + pages) so Jack sees what the Hive remembers; today only the agent runtime reads it.",
+   "in": "Memory is written by the agent runtime's own memory system during conversations; no app or external service writes into it, and the Hive core (SUPERHIGHBASE) holds none of it \u2014 the two memory stores are not synced.",
+   "gaps": [
+    "Lives in the agent platform, not in Hive-owned storage \u2014 platform loss is the exact failure the doctrine says must not happen",
+    "No sync path between this tree and SUPERHIGHBASE's (empty) memory-graph tables",
+    "No UI surface exists"
+   ],
+   "connect_action": "embed"
+  },
+  {
+   "id": "github-masters-building",
+   "name": "GitHub masters \u2014 KINGJACK1134/THE-UNIVERSAL-HIVE (building repo)",
+   "kind": "data",
+   "url": "https://github.com/KINGJACK1134/THE-UNIVERSAL-HIVE",
+   "state": "live",
+   "verified": "Public GitHub API returned 200 for the repo on 2026-11-05; it is the repo actually building and serving the Hive shell at hive.scammersknightmare.com (GitHub Pages) \u2014 every 2026-11-04/05 shell push (Terms clauses, Architect's Login, KRACKERJACK AI live wire) landed here via the official GitHub connector and verified in served bytes.",
+   "out": "Admin UI reaches it via the GitHub connector/API: read files, push updates, read Actions job status (unauthenticated public Actions API; the JOBS endpoint is the truth).",
+   "in": "Build results report back as Pages deployments verified by fetching served bytes; the repo does not push status into any Hive store.",
+   "gaps": [
+    "Push path depends on the connector session for this account; the vault password for this identity is stale (cookie session only) \u2014 if the session dies, recovery needs Jack's hands",
+    "No webhook or status feed into SUPERHIGHBASE/Admin UI"
+   ],
+   "connect_action": "api"
+  },
+  {
+   "id": "github-masters-canonical",
+   "name": "GitHub masters \u2014 JACK-SCHITT/THE-UNIVERSAL-HIVE (canonical twin) + JACK-SCHITT account",
+   "kind": "data",
+   "url": "https://github.com/JACK-SCHITT/THE-UNIVERSAL-HIVE",
+   "state": "live",
+   "verified": "Public GitHub API returned 200 on 2026-11-05. Recovery verified 2026-11-04: Jack signed in himself (Google + GitHub Mobile 2FA) and 10 of 11 batch-deleted repos were restored (account 20 \u2192 30 repos); KingshotRedeemer is restorable only via a GitHub Support ticket, not filed. This twin is canonical (has the workflow + full failure history) but its Actions UI is billing-locked (404s even signed in), so no runner token can be generated there.",
+   "out": "Admin UI reaches the code through the same GitHub API/connector surface; as a master store it is read/restored through the web UI with Jack signing in himself.",
+   "in": "Nothing automated reports back; restores and inventory happen in attended sessions only.",
+   "gaps": [
+    "Actions billing lock means the canonical twin cannot build \u2014 builds ride the KINGJACK1134 twin",
+    "No standing agent session for this account (sign-in is Jack's own act each time)"
+   ],
+   "connect_action": "api"
+  },
+  {
+   "id": "github-app-repos-jackschitt1134",
+   "name": "GitHub app repos \u2014 JACKSCHITT1134 account (ScammersKnightmare, TeamGemini, BlindmanAI)",
+   "kind": "data",
+   "url": null,
+   "state": "built-not-live",
+   "verified": "Standing record through 2026-11-05: this account's Deleted-repositories list has never been checked signed-in; its private app repos (ScammersKnightmare, TeamGemini, BlindmanAI) are unaccounted from outside. Built files of all three apps are held locally regardless in ~/workspace/onspace-salvage/live-web-apps/.",
+   "out": "Admin UI inventory would list these repos once inventoried; the local salvage copies are reachable as files today.",
+   "in": "No inventory, no status \u2014 nothing reports back from this account.",
+   "gaps": [
+    "Requires an attended session with Jack signing in himself (same recovery routine as JACK-SCHITT) before any inventory or restore",
+    "Unknown what still exists there"
+   ],
+   "connect_action": "manual"
+  },
+  {
+   "id": "drive-masters",
+   "name": "Google Drive masters (second master copy)",
+   "kind": "data",
+   "url": null,
+   "state": "design-only",
+   "verified": "Standing masters rule from the 2026-11-01 IP protection audit: masters live in GitHub (private) + Google Drive; platforms hold working copies only; every training toggle off the day an account opens. The Google Drive connector is connected, but Drive contents as a masters store have not been inventoried against the GitHub masters \u2014 the rule is policy today, not a verified mirrored store.",
+   "out": "Admin UI would reach Drive through the connected Google Drive connector (find/download/share) once the masters folders are designated and inventoried.",
+   "in": "Nothing syncs GitHub masters to Drive automatically; uploads are manual acts.",
+   "gaps": [
+    "No inventory of what masters actually sit in Drive today",
+    "No sync mechanism \u2014 drift between the two masters is unchecked",
+    "Several Google identities exist in his world; which Drive is the masters Drive is not pinned in the record"
+   ],
+   "connect_action": "manual"
+  },
+  {
+   "id": "zorg-omega-layer",
+   "name": "ZORG OMEGA trap layer (canaries + intrusion log + wartime posture)",
+   "kind": "data",
+   "url": null,
+   "state": "design-only",
+   "verified": "Spec read 2026-11-05: files/zorg-omega.md (named by Jack 2026-10-31). Two canaries are planted in existing builds (locations recorded in the spec; values never printed anywhere). Peacetime orders: DETECT, LOG to SUPERHIGHBASE, DENY, ALERT the Architect; wartime directive unlocks on attack itself. Verified gap: the detection/logging pipeline is a JOB #1 core build item \u2014 SUPERHIGHBASE has no ZORG/intrusion table (0 rows everywhere, 2026-11-05) and no honeypot endpoint or alert path is running. Separately, the hive-sentinel hook (see its row) watches service health, not canary trips.",
+   "out": "Admin UI would surface ZORG as the security room: canary status (planted/unplanted per build), intrusion events, wartime posture \u2014 reading the SUPERHIGHBASE event log once it exists.",
+   "in": "Today a canary trip has no automated way to report anywhere: no endpoint logs it and no alert reaches Jack except a human/agent noticing. Canary values are never stored, printed, or transmitted by the agent \u2014 locations only.",
+   "gaps": [
+    "Core security layer unbuilt (slice 2): no detect/log/deny/alert pipeline",
+    "The planted token's blast radius is an open ZORG intelligence item (checked only via GitHub's token list UI, never by using it)",
+    "If a canary-carrying build is replaced, the trap must be re-planted or formally retired by Jack \u2014 tracked nowhere yet"
+   ],
+   "connect_action": "core-gated"
+  },
+  {
+   "id": "copyright-registry-db",
+   "name": "Hive Copyright Registry database (registry.db)",
+   "kind": "data",
+   "url": null,
+   "state": "built-not-live",
+   "verified": "Read-only sqlite3 inspection 2026-11-05: ~/workspace/hive-standalone/copyright-registry/registry.db has one table (deposits) with exactly 1 row \u2014 deposit HCR-2026-0001, THE AMERICAN REBEL FLAG (created 2011, deposited 2026-11-04). registry.py + vault/ + certificates/ present. Honest label is law: a private registry record, NOT a U.S. Copyright Office registration.",
+   "out": "Admin UI reaches it through registry.py on this machine today (CLI); a UI surface would read the deposits table via the core or a small local endpoint \u2014 none exists.",
+   "in": "Deposits are entered by running registry.py locally; nothing external reports in and no certificate lookup is exposed anywhere.",
+   "gaps": [
+    "No web front, no API, no payments lane",
+    "Deposit price unset (Jack's call); federal USCO wave is a separate lane with its own 2026-11-11 fee-rise deadline decision pending"
+   ],
+   "connect_action": "manual"
+  },
+  {
+   "id": "hive-sentinel-hook",
+   "name": "Hive Sentinel hook (estate health watch)",
+   "kind": "data",
+   "url": null,
+   "state": "live",
+   "verified": "hooks.list 2026-11-05: hook 'hive-sentinel' enabled, polling every 600s from ~/hooks/scripts/hive-sentinel.sh, delivering to the main chat; standing record: 15 watched targets, silent while healthy, repair worker fixes within standing powers or escalates to Jack.",
+   "out": "Admin UI can read hook state and logs through the hooks tools (list/logs) \u2014 the closest thing today to a live estate-health feed for the UI.",
+   "in": "It reports by waking a worker agent that messages the main chat; it writes nothing to SUPERHIGHBASE or any UI store.",
+   "gaps": [
+    "Health data lands in chat, not in a queryable store the Admin UI can render",
+    "Watches reachability of surfaces, not the ZORG canaries or core internals"
+   ],
+   "connect_action": "api"
+  },
+  {
+   "id": "cron-virginia-ip-watch",
+   "name": "Cron \u2014 virginia-ip-watch (daily)",
+   "kind": "data",
+   "url": null,
+   "state": "live",
+   "verified": "cron.list 2026-11-05: enabled, daily 09:47 user-local, owner goal:the-hive-ecosystem; compares a watched IP against the stored baseline (~/workspace/goals/the-hive-ecosystem/hidden_files/ip-watch/virginia-ip-baseline.json).",
+   "out": "Admin UI reaches the fleet through the cron tools (list/status/runs per job).",
+   "in": "Runs report into chat/goal timeline; change alerts surface as messages, not into a data store.",
+   "gaps": [
+    "Open question in the record: whether the watched address is Jack on a VPN \u2014 unanswered, so alerts carry that ambiguity",
+    "No run history exposed to any UI surface"
+   ],
+   "connect_action": "api"
+  },
+  {
+   "id": "cron-x-monetization-weekly",
+   "name": "Cron \u2014 x-monetization-weekly (Mondays)",
+   "kind": "data",
+   "url": null,
+   "state": "live",
+   "verified": "cron.list 2026-11-05: enabled, weekly Mon 09:47, owner goal:x-monetization-push. Last recorded check 2026-11-02: @KRACKERJACK1134 at 902 followers; payout bar (500 verified followers + 500,000 verified impressions/90 days) not measurable from public data.",
+   "out": "Admin UI reaches it through the cron tools (list/status/runs); its check logs live under the x-monetization-push goal's hidden_files.",
+   "in": "Reports follower counts into the goal log and chat; nothing writes to a Hive store.",
+   "gaps": [
+    "Impression-side of the monetization bar is not publicly measurable \u2014 the data the UI would show is partial by platform design"
+   ],
+   "connect_action": "api"
+  },
+  {
+   "id": "cron-isaac-watch-weekly",
+   "name": "Cron \u2014 isaac-watch-weekly (Fridays)",
+   "kind": "data",
+   "url": null,
+   "state": "live",
+   "verified": "cron.list 2026-11-05: enabled, weekly Fri 10:47 user-local, owner goal:million-follower-x-campaign. Implements the ISAAC PROTOCOL watch on @IsaacWebAudit (promote while legit; every promo post needs Jack's word on exact text).",
+   "out": "Admin UI reaches it through the cron tools (list/status/runs).",
+   "in": "Reports what's promotable and flags red flags into chat; promotion itself never auto-fires.",
+   "gaps": [
+    "Findings live in chat only \u2014 no promotable-items store for the UI to render"
+   ],
+   "connect_action": "api"
+  },
+  {
+   "id": "cron-hive-quant-desk",
+   "name": "Cron \u2014 hive-quant-desk-nightly-refresh (daily)",
+   "kind": "data",
+   "url": null,
+   "state": "live",
+   "verified": "cron.list 2026-11-05: enabled, daily 01:00, owner goal:hive-quant-desk. Engine at ~/workspace/hive-standalone/quant-desk/ (Yahoo data, 19 symbols, Donchian 20/10; paper book $25,000, cash).",
+   "out": "Admin UI reaches the schedule via cron tools and the engine's outputs as workspace files under the quant-desk goal.",
+   "in": "Nightly refresh writes its data under the goal workspace; no feed into SUPERHIGHBASE or any UI.",
+   "gaps": [
+    "Paper only by design \u2014 no broker connection exists (Alpaca paper awaits Jack's signup + paper keys via the vault)",
+    "Engine outputs are files, not a queryable store"
+   ],
+   "connect_action": "api"
+  },
+  {
+   "id": "cron-ionos-deadline-check",
+   "name": "Cron \u2014 ionos-dispute-deadline-check (one-shot, 2026-11-19)",
+   "kind": "data",
+   "url": null,
+   "state": "live",
+   "verified": "cron.list 2026-11-05: enabled, runonce 2026-11-19T10:47, owner goal:ionos-debt-dispute. Guards the IONOS/TrueAccord dispute ($50.95, appeal filed online 2026-10-28).",
+   "out": "Admin UI reaches it through the cron tools (status/runs).",
+   "in": "Fires once and reports into chat; nothing persists to a store.",
+   "gaps": [
+    "Expires by design after its single run \u2014 the Admin UI should treat it as a dated commitment, not a standing feed"
+   ],
+   "connect_action": "api"
+  },
+  {
+   "id": "crons-disabled-fleet",
+   "name": "Cron fleet \u2014 DISABLED under credit conservation (6 jobs)",
+   "kind": "data",
+   "url": null,
+   "state": "offline",
+   "verified": "cron.list with disabled included, 2026-11-05: hive-runner-watchdog (10m), stripe-sale-watcher (15m), scamshield-x-engine (daily), scammer-blast-daily (daily), scamshield-email-digest (weekly), ltk-application-watch (daily) \u2014 all enabled:false, definitions kept. Resume trigger on record: first money in, or Jack's word. Note the X-posting jobs also sit under the standing X pause (suspended-account automation never resumes without Jack).",
+   "out": "Admin UI reaches them through the cron tools (list shows them disabled; enabling is a deliberate act, not a UI toggle to ship casually).",
+   "in": "None \u2014 disabled jobs produce nothing.",
+   "gaps": [
+    "stripe-sale-watcher being off means sale events have no automated watcher \u2014 relevant to the Admin UI's money room",
+    "Runner watchdog being off means a dead self-hosted runner stays dead until noticed (builds currently ride hosted runners)"
+   ],
+   "connect_action": "manual"
+  }
+ ]
+}
