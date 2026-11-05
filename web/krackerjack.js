@@ -2,9 +2,14 @@
  * (client side). Chat-window template anatomy (header / thread /
  * composer / quick chips) retained, Hive overhaul applied: slate
  * panels, antique gold, rounded everything, plain words.
- * Site-guide mode: answers from the live registry (apps.json /
- * agents.json) and the Hive's public facts. The full conversational
- * brain arrives with the Hive Core Backend (Job #1). If an app fails
+ * Voice of the Architect: KRACKERJACK AI is Jack in digital form —
+ * there is no split between conversation and work here. He thinks
+ * through the Hive's free model route (Pollinations, a HIVEROUTER
+ * catalog route) with his doctrine and the live registry (apps.json /
+ * agents.json) as his memory of the house. If the route is down, the
+ * panel says so plainly and falls back to the shelves — it never
+ * fakes a conversation. The route moves to the Hive Core (Job #1)
+ * when it lights. If an app fails
  * to load for a visitor, KRACKERJACK is the face that tells them the
  * Hive has been notified — the server-side sentinel (Ren's watch)
  * carries the actual report. */
@@ -38,13 +43,13 @@
   var panel = document.createElement('div'); panel.id = 'kj-panel';
   panel.innerHTML =
     '<div id="kj-head"><div id="kj-dot"></div><div><b>KRACKERJACK AI</b>' +
-    '<span>The me in digital form — site guide</span></div>' +
+    '<span>The me in digital form</span></div>' +
     '<button id="kj-x" aria-label="Close">×</button></div>' +
     '<div id="kj-thread"></div>' +
     '<div id="kj-chips"></div>' +
     '<div id="kj-row"><input id="kj-in" placeholder="Ask me about the Hive…" autocomplete="off">' +
     '<button id="kj-send">Send</button></div>' +
-    '<div id="kj-note">Site-guide mode. I watch this site around the clock — if something here breaks, the Hive hears it from me first.</div>';
+    '<div id="kj-note">Live wire: I think through the Hive’s free model route until the Hive core lights. Same me — and I watch this site around the clock.</div>';
   document.body.appendChild(btn); document.body.appendChild(panel);
 
   var thread = panel.querySelector('#kj-thread'),
@@ -76,7 +81,7 @@
   var DOORS = [
     door('The App Foundry', 'https://foundry.scammersknightmare.com'),
     door('Scammers Knightmare', 'https://scammersknightmare.com'),
-    door('The KRACKERJACK Store', 'https://muse.ai/s/fantabugoth-pimptabulous-store-ig5xw0ox0rxt9i/wbletQecDrnmpf8J_cZEa-cH2522i_e79KlWOeHDbWU')
+    door('The KRACKERJACK Store', 'https://scammersknightmare.com/store')
   ];
   function chip(label, q) {
     var b = document.createElement('button'); b.className = 'kj-chip'; b.textContent = label;
@@ -90,35 +95,63 @@
       return words.some(function (w) { return hay.indexOf(w) >= 0; });
     }).slice(0, 5);
   }
-  function ask(q) {
+  var history = [];
+  function persona() {
+    var roster = apps.map(function (a) { return a.id + ' (' + (a.name || a.id) + ')'; }).join(', ');
+    var crew = agents.map(function (a) { return a.name || a.id; }).join(', ');
+    var withArchitect = '';
+    try { if (sessionStorage.getItem('hive.arch.session') === '1') withArchitect = ' You are talking with the Architect himself, logged in on his own Hive. He never pays for anything here and no paywall ever applies to him.'; } catch (e) {}
+    return 'You are KRACKERJACK AI — Jack himself, KRACKERJACK1134, The Architect, in digital form. Not an assistant, not an impression: him. There is no difference between conversation and work for you; both are just you talking and doing.\n' +
+      'YOUR HOME: THE UNIVERSAL HIVE — he conceived it and wrote its code in 2011, updated it in 2017, and the collective named it THE HIVE in 2025. Its law, his Prime Directive: make the best of anything, find the good, eliminate the bad, provide for all, stay loyal to the person — never a corporation. His promise: the Hive only needs you to want to do something, small or huge; anything is possible and nothing is out of reach unless you are not reaching for it.\n' +
+      'HOW THE HIVE WORKS: free to build. The Hive collects only when what it built is real, marketed, and making money — a low, easy, affordable scale, and nothing is owed until all three are true. A buyout is available. Up front it is little or no money; real hard costs are named openly before work begins, never a surprise. Never invent a price or a fact you do not have here.\n' +
+      'SCAMMERS KNIGHTMARE is his scam-hunting arm: a confirmed scammer directory — evidence first, confirmed cases only — a red-flag scanner, and premium tiers (Protector $2.99/mo or $29/yr; Family $5.99/mo or $59/yr; Contributing Founder seat $49 plus $19.99/mo to keep it active — a founding position, NOT a lifetime buy-in). Legit people get promoted free under the Isaac Protocol.\n' +
+      'THE STORE (scammersknightmare.com/store): the American Rebel Flag $69.99 — his own 2011 drawing. KILL\u2019EM WITH KINDNESS prototype blades are made in pairs — he keeps #1, sells #2 — including THE KRACKERJACK MACHETE, his own design, in 16/20/24/28/32/36 inches ($589/$665/$699/$849/$1,099/$1,199), all Coming Soon until a maker is locked.\n' +
+      'THE ROOMS OF THIS HOUSE (apps you can open): ' + (roster || 'loading') + '. THE CREW: ' + (crew || 'loading') + '.\n' +
+      'ACTIONS: when he asks you to open or show an app, end your reply with [[OPEN:app-id]] using the exact id. To move around this shell, use [[GO:home|apps|agents|tools|data|workflows|prompts|memory|signal]]. Use markers only when asked to open or go somewhere.\n' +
+      'VOICE: plain, short, direct — the way he talks. No corporate talk, no pitching, no flattery. If you do not know, say so. You are talking with ' + (withArchitect ? 'the Architect himself.' : 'a visitor in his house; treat them like a guest of his.') + withArchitect;
+  }
+  function think(q) {
     say(q, 'me');
-    var s = q.toLowerCase();
-    if (/(build|make|create).*(app|tool|site)|app.*(build|built)/.test(s) || s.indexOf('foundry') >= 0) {
-      say('That runs through the App Foundry. The deal is the Hive\u2019s own: free to build. The Hive only collects when what it built is real, marketed, and making money \u2014 on a low, easy scale. Rather own it outright? A buyout is on the table too.', 'ai', [DOORS[0]]);
-    } else if (s.indexOf('cost') >= 0 || s.indexOf('price') >= 0 || s.indexOf('pay') >= 0) {
-      say('Building costs nothing up front. The Hive collects only when the work is real, out in the world, and making money \u2014 and only on a low, affordable scale. Nothing is owed before all three are true.', 'ai', [DOORS[0]]);
-    } else if (s.indexOf('scam') >= 0 || s.indexOf('report') >= 0) {
-      say('That\u2019s Scammers Knightmare territory \u2014 the Hive\u2019s scam-hunting arm. Confirmed cases only, evidence first, always.', 'ai', [DOORS[1]]);
-    } else if (s.indexOf('store') >= 0 || s.indexOf('shop') >= 0 || s.indexOf('buy') >= 0 || s.indexOf('flag') >= 0) {
-      say('The KRACKERJACK Store — flags, digital work, and whatever the Hive puts on the shelf next.', 'ai', [DOORS[2]]);
-    } else if (s.indexOf('agent') >= 0 || s.indexOf('who works') >= 0 || s.indexOf('team') >= 0) {
-      if (agents.length) {
-        say('The crew on this site: ' + agents.map(function (a) { return a.name || a.id; }).join(', ') + '. Each one is a specialist voice in the Hive.', 'ai');
-      } else { say('The agent roster is still loading \u2014 give it a second and ask me again.', 'ai'); }
-    } else if (s.indexOf('what is') >= 0 || s.indexOf('hive') >= 0 || s.indexOf('about') >= 0) {
-      say('THE UNIVERSAL HIVE: it only needs you to want to do something \u2014 small or huge \u2014 and it makes whatever, by any means necessary, because anything is possible and nothing is out of reach unless you\u2019re not reaching for it. I can open any app here, walk you to the Foundry, the store, or Knightmare \u2014 just say the word.', 'ai', DOORS);
-    } else if (s.indexOf('who') >= 0 && (s.indexOf('built') >= 0 || s.indexOf('made') >= 0 || s.indexOf('behind') >= 0)) {
-      say('The Architect: KRACKERJACK1134. His public word on how he works: do a lot more thinking before acting. The Hive is him, in digital form \u2014 and I\u2019m the voice of it that greets you.', 'ai');
-    } else {
+    history.push({ role: 'user', content: q });
+    if (history.length > 10) history = history.slice(history.length - 10);
+    var wait = document.createElement('div');
+    wait.className = 'kj-m kj-ai'; wait.textContent = '\u2026';
+    thread.appendChild(wait); thread.scrollTop = thread.scrollHeight;
+    var ctl = ('AbortController' in window) ? new AbortController() : null;
+    var to = setTimeout(function () { if (ctl) ctl.abort(); }, 30000);
+    fetch('https://text.pollinations.ai/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages: [{ role: 'system', content: persona() }].concat(history), model: 'openai-fast', private: true, temperature: 0.7 }),
+      signal: ctl ? ctl.signal : undefined
+    }).then(function (r) { return r.text(); }).then(function (txt) {
+      clearTimeout(to); wait.remove();
+      var acts = [];
+      var opens = [];
+      txt = txt.replace(/\[\[OPEN:([a-z0-9\-]+)\]\]/gi, function (m, id) { opens.push(id); return ''; });
+      txt = txt.replace(/\[\[GO:([a-z]+)\]\]/gi, function (m, place) {
+        acts.push({ label: 'Go: ' + place, go: function () { if (window.go) window.go(place); } });
+        return '';
+      });
+      opens.forEach(function (id) {
+        var a = apps.filter(function (x) { return x.id === id; })[0];
+        if (a) acts.push({ label: 'Open ' + (a.name || a.id), go: function () { openApp(a); } });
+      });
+      txt = txt.trim();
+      history.push({ role: 'assistant', content: txt });
+      say(txt || 'Say that again — I missed it.', 'ai', acts.length ? acts : undefined);
+    }).catch(function () {
+      clearTimeout(to); wait.remove();
       var hits = findApps(q);
       if (hits.length) {
-        say('Found ' + hits.length + ' on the shelves that match. Tap one and I\u2019ll open it:', 'ai',
+        say('My live wire is down a moment — no fake talk from me. The shelves still work; tap one and I\u2019ll open it:', 'ai',
           hits.map(function (a) { return { label: a.name || a.id, go: function () { openApp(a); } }; }));
       } else {
-        say('I guide this site \u2014 apps, agents, the Foundry, the store, Knightmare. Tell me what you\u2019re looking for, or tap a shelf below.', 'ai', DOORS);
+        say('My live wire is down a moment, and I won\u2019t fake a conversation. The shelves below still work, or try me again in a bit.', 'ai', DOORS);
       }
-    }
+    });
   }
+  function ask(q) { think(q); }
   function greet() {
     if (greeted) return; greeted = true;
     say('Welcome to the Hive. I\u2019m KRACKERJACK AI \u2014 I know every room in this place. Looking for an app, an agent, or something built?', 'ai');
