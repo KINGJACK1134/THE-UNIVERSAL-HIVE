@@ -11,9 +11,11 @@ const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 function store(k, v) { localStorage.setItem("hive." + k, JSON.stringify(v)); }
 function load(k, d) { try { return JSON.parse(localStorage.getItem("hive." + k)) ?? d; } catch { return d; } }
-async function jget(p) { const r = await fetch(p); if (!r.ok) throw new Error(r.status); return r.json(); }
+const CORE = "https://scammersknightmare.com";
+function api(p) { return p.startsWith("/api") ? CORE + p : p; }
+async function jget(p) { const r = await fetch(api(p)); if (!r.ok) throw new Error(r.status); return r.json(); }
 async function jpost(p, b) {
-  const r = await fetch(p, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(b || {}) });
+  const r = await fetch(api(p), { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(b || {}) });
   return { status: r.status, ...(await r.json().catch(() => ({}))) };
 }
 
