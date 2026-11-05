@@ -363,6 +363,25 @@ boot();
   if (!btn || !panel) return;
 
   const HKEY = "arch.hash", SKEY = "arch.salt", SES = "hive.arch.session";
+  const seatEl = document.getElementById("hive-seat");
+  let seatNote = null;
+  function applyArchitect(on) {
+    if (!seatEl) return;
+    if (on) {
+      seatEl.style.display = "none";
+      if (!seatNote) {
+        seatNote = document.createElement("div");
+        seatNote.className = "seat"; seatNote.id = "arch-seat-note";
+        seatNote.innerHTML = "<h2>THE ARCHITECT IS IN</h2><p>This Hive is yours — no seat to claim, no paywall in your way. The claim pitch shows for everyone else. It never shows for you.</p>";
+        seatEl.after(seatNote);
+      }
+      seatNote.style.display = "";
+    } else {
+      seatEl.style.display = "";
+      if (seatNote) seatNote.style.display = "none";
+    }
+  }
+
   let entry = [], phase = "idle", firstSet = null, fails = 0, timer = null, left = 0;
 
   padEl.innerHTML = RAIL.map(([id, ic, label]) =>
@@ -433,6 +452,7 @@ boot();
       OP = "KRACKERJACK1134"; store("operator", OP);
       btn.classList.remove("armed"); btn.classList.add("architect");
       btn.querySelector(".arch-label").textContent = "THE ARCHITECT — IN";
+      applyArchitect(true);
       const who = document.getElementById("who"); if (who) who.textContent = "KRACKERJACK1134 · THE ARCHITECT";
       say("Welcome back, Architect."); phase = "in";
       setTimeout(() => { panel.hidden = true; }, 1200);
@@ -448,6 +468,7 @@ boot();
   btn.addEventListener("click", () => {
     if (sessionStorage.getItem(SES) === "1") {
       sessionStorage.removeItem(SES);
+      applyArchitect(false);
       btn.classList.remove("architect");
       btn.querySelector(".arch-label").textContent = "THE ARCHITECT’S LOGIN";
       phase = "idle"; panel.hidden = true; stopTimer(); return;
@@ -471,5 +492,6 @@ boot();
     btn.classList.add("architect");
     btn.querySelector(".arch-label").textContent = "THE ARCHITECT — IN";
     OP = "KRACKERJACK1134";
+    applyArchitect(true);
   }
 })();
