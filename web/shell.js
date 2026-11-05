@@ -367,6 +367,7 @@ boot();
   const padEl = document.getElementById("arch-pad");
   const fsBtn = document.getElementById("arch-failsafe");
   const deactBtn = document.getElementById("arch-deact");
+  const lockBtn = document.getElementById("arch-lock");
   if (!btn || !ui || !padEl) return;
 
   const PH = "arch.hash", PS = "arch.salt";      // layer 2 — his, untouched
@@ -429,6 +430,7 @@ boot();
     ui.hidden = false; btn.classList.add("armed");
     fsBtn.hidden = false; fsBtn.textContent = "FAIL SAFE"; fsArmed = false;
     if (deactBtn) deactBtn.hidden = st !== "pad";
+    if (lockBtn) lockBtn.hidden = true;
     padWrap.hidden = st !== "pad";
     if (st === "knock") {
       mode = load(KH, "") ? "login" : "setup1";
@@ -493,10 +495,11 @@ boot();
   padEl.addEventListener("click", e => { const b = e.target.closest("[data-arch]"); if (b) pressedPad(b.dataset.arch); });
   btn.addEventListener("click", () => {
     if (sessionStorage.getItem(SES) === "1") {
-      sessionStorage.removeItem(SES);
-      applyArchitect(false);
-      btn.classList.remove("architect");
-      btn.querySelector(".arch-label").textContent = "THE ARCHITECT’S LOGIN";
+      ui.hidden = false; padWrap.hidden = true;
+      fsBtn.hidden = true;
+      if (lockBtn) lockBtn.hidden = false;
+      if (deactBtn) deactBtn.hidden = false;
+      say("You're in, Architect. Lock this session — or lock it all the way back to sleep.");
       return;
     }
     if (!stage) { startStage(load(ACT, "") ? "pad" : "knock"); }
@@ -505,10 +508,17 @@ boot();
     clearTimeout(gapTimer);
     gapTimer = setTimeout(closeSet, GAP);
   });
-  if (deactBtn) deactBtn.addEventListener("click", () => {
-    localStorage.removeItem("hive." + ACT);
-    endUI("Deactivated. On this device the button sleeps again — your knock wakes it.");
-  });
+  function lockBack(full) {
+    sessionStorage.removeItem(SES);
+    applyArchitect(false);
+    btn.classList.remove("architect");
+    btn.querySelector(".arch-label").textContent = "THE ARCHITECT’S LOGIN";
+    if (full) localStorage.removeItem("hive." + ACT);
+    endUI(full ? "Locked all the way back. The button sleeps on this device — your knock wakes it."
+               : "Locked. The button stays awake on this device; your combination opens it.");
+  }
+  if (lockBtn) lockBtn.addEventListener("click", () => lockBack(false));
+  if (deactBtn) deactBtn.addEventListener("click", () => lockBack(true));
   fsBtn.addEventListener("click", () => {
     if (!fsArmed) {
       fsArmed = true;
