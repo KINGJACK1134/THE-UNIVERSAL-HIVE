@@ -942,8 +942,8 @@
   },
   {
     "lane": "core",
-    "id": "universal-hive-demos",
-    "path": "apps/core/universal-hive-demos",
+    "id": "universal-hive",
+    "path": "apps/core/universal-hive",
     "stack": [
       "node"
     ],
