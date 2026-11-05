@@ -348,24 +348,39 @@ async function boot() {
 boot();
 
 // ---- THE ARCHITECT'S LOGIN -------------------------------------------------
-// The button stays in plain sight. It could be clicked a million times and
-// never open: the combination is 6 SETS OF CLICKS on the one button, each
-// set 1-9 clicks, a pause closing each set. The combination is set by the
-// Architect himself, on this device — only a salted SHA-256 hash of the
-// counts is kept (localStorage, this browser). The counts themselves are
-// never stored or sent anywhere.
+// DUAL SECURITY, the Architect's design. The button stays in plain sight
+// and could be clicked a million times without opening:
+//   Layer 1 (the knock): 6 SETS OF CLICKS on the one button, each set 1-9
+//     clicks, a pause closing each set.
+//   Layer 2 (his combination): the 6-button pad sequence he set himself.
+// Both are set by the Architect alone, on this device. Only salted SHA-256
+// hashes are kept (localStorage, this browser); the combination and the
+// counts themselves are never stored or sent anywhere. Layer 2's original
+// keys (arch.hash / arch.salt) are untouched — his existing combination
+// stands exactly as he set it.
 (function () {
   const btn = document.getElementById("arch-login");
   const ui = document.getElementById("arch-ui");
   const status = document.getElementById("arch-status");
   const dotsEl = document.getElementById("arch-dots");
+  const padWrap = document.getElementById("arch-padwrap");
+  const padEl = document.getElementById("arch-pad");
   const fsBtn = document.getElementById("arch-failsafe");
-  if (!btn || !ui) return;
+  const deactBtn = document.getElementById("arch-deact");
+  if (!btn || !ui || !padEl) return;
 
-  const HKEY = "arch.khash", SKEY = "arch.ksalt", SES = "hive.arch.session";
+  const PH = "arch.hash", PS = "arch.salt";      // layer 2 — his, untouched
+  const KH = "arch.khash", KS = "arch.ksalt";    // layer 1 — the knock
+  const ACT = "arch.act";                        // device activation flag
+  const SES = "hive.arch.session";
   const GAP = 950, WINDOW = 30000;
-  let listening = false, sets = [], cur = 0, mode = "login", firstPass = null;
+  let stage = null;            // 'knock' | 'pad'
+  let mode = "login";          // per-layer: 'login' | 'setup1' | 'setup2'
+  let sets = [], cur = 0, entry = [], firstPass = null;
   let gapTimer = null, winTimer = null, fsArmed = false;
+
+  padEl.innerHTML = RAIL.map(([id, ic, label]) =>
+    `<button type="button" data-arch="${id}"><span class="ic">${ic}</span> ${label}</button>`).join("");
 
   const seatEl = document.getElementById("hive-seat");
   let seatNote = null;
@@ -387,8 +402,8 @@ boot();
     }
   }
 
-  async function hashOf(counts, salt) {
-    const msg = salt + "|" + counts.join("-");
+  async function hashOf(str, salt) {
+    const msg = salt + "|" + str;
     if (crypto?.subtle) {
       const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(msg));
       return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, "0")).join("");
@@ -397,50 +412,72 @@ boot();
     for (let i = 0; i < msg.length; i++) { h ^= msg.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; }
     return "fnv" + h.toString(16);
   }
-  const dots = () => [...dotsEl.children].forEach((d, i) => d.classList.toggle("full", i < sets.length));
+  const fill = n => [...dotsEl.children].forEach((d, i) => d.classList.toggle("full", i < n));
   function say(t) { status.innerHTML = t; }
   function stopTimers() { clearTimeout(gapTimer); clearTimeout(winTimer); gapTimer = winTimer = null; }
-  function endListen(msg) {
-    stopTimers(); listening = false; sets = []; cur = 0; fsArmed = false;
-    btn.classList.remove("armed"); dots();
-    if (msg) { say(msg); setTimeout(() => { ui.hidden = true; }, 1800); }
+  function newSalt() { return [...crypto.getRandomValues(new Uint8Array(12))].map(b => b.toString(16).padStart(2, "0")).join(""); }
+  function endUI(msg) {
+    stopTimers(); stage = null; sets = []; cur = 0; entry = []; firstPass = null; fsArmed = false;
+    btn.classList.remove("armed"); padWrap.hidden = true; fill(0);
+    if (msg) { say(msg); setTimeout(() => { ui.hidden = true; }, 2000); }
     else ui.hidden = true;
   }
-  function startListen() {
-    listening = true; sets = []; cur = 0; dots();
+  function armWindow() { clearTimeout(winTimer); winTimer = setTimeout(() => endUI("Time. The window closed."), WINDOW); }
+
+  function startStage(st) {
+    stage = st; sets = []; cur = 0; entry = []; fill(0);
     ui.hidden = false; btn.classList.add("armed");
-    fsBtn.hidden = mode !== "login";
-    fsBtn.textContent = "FAIL SAFE";
-    say(mode === "login" ? "The words are gone. Knock your six sets."
-        : mode === "setup1" ? "Set your combination: 6 sets of clicks, 1 to 9 each. Pause between sets."
-        : "Once more, to confirm it.");
-    winTimer = setTimeout(() => endListen("Time. The window closed."), WINDOW);
+    fsBtn.hidden = false; fsBtn.textContent = "FAIL SAFE"; fsArmed = false;
+    if (deactBtn) deactBtn.hidden = st !== "pad";
+    padWrap.hidden = st !== "pad";
+    if (st === "knock") {
+      mode = load(KH, "") ? "login" : "setup1";
+      say(mode === "login" ? "The button sleeps on this device. Knock your six sets to wake it."
+          : "First lock — set your knock: 6 sets of clicks on this button, 1 to 9 each, pause between sets.");
+    } else {
+      mode = load(PH, "") ? "login" : "setup1";
+      say(mode === "login" ? "Knock accepted. Now your buttons."
+          : "Second lock — set your button combination: press any 6.");
+    }
+    armWindow();
   }
+  // ---- layer 1: the knock ----
   function closeSet() {
-    if (cur > 0) { sets.push(cur); cur = 0; dots(); }
-    if (sets.length >= 6) finish();
+    if (cur > 0) { sets.push(cur); cur = 0; fill(sets.length); }
+    if (sets.length >= 6) finishKnock();
   }
-  async function finish() {
+  async function finishKnock() {
     stopTimers();
-    const counts = sets.slice(); sets = []; cur = 0;
-    if (mode === "setup1") {
-      firstPass = counts; mode = "setup2"; dots();
-      say("Once more, to confirm it.");
-      listening = true;
-      winTimer = setTimeout(() => endListen("Time. The window closed."), WINDOW);
-      return;
-    }
+    const str = sets.slice().join("-"); sets = []; fill(0);
+    if (mode === "setup1") { firstPass = str; mode = "setup2"; say("Knock it once more, to confirm."); armWindow(); return; }
     if (mode === "setup2") {
-      if (counts.join() !== firstPass.join()) {
-        mode = "setup1"; firstPass = null; endListen("Those did not match. Click the button and set it again.");
-        return;
-      }
-      const salt = [...crypto.getRandomValues(new Uint8Array(12))].map(b => b.toString(16).padStart(2, "0")).join("");
-      store(SKEY, salt); store(HKEY, await hashOf(counts, salt));
-      endListen("Your combination is set — on this device, by you alone.");
+      if (str !== firstPass) { endUI("Those knocks did not match. Click the button and set them again."); return; }
+      const salt = newSalt();
+      store(KS, salt); store(KH, await hashOf(str, salt));
+      store(ACT, "1");
+      say("Button activated. Now the second lock.");
+      setTimeout(() => startStage("pad"), 700);
       return;
     }
-    const ok = (await hashOf(counts, load(SKEY, ""))) === load(HKEY, "");
+    const ok = (await hashOf(str, load(KS, ""))) === load(KH, "");
+    if (ok) { store(ACT, "1"); startStage("pad"); }
+    else endUI("Not it.");
+  }
+  // ---- layer 2: his pad combination ----
+  async function pressedPad(id) {
+    if (stage !== "pad") return;
+    entry.push(id); fill(entry.length);
+    if (entry.length < 6) return;
+    const str = entry.join(">"); entry = []; stopTimers();
+    if (mode === "setup1") { firstPass = str; mode = "setup2"; fill(0); say("Once more, to confirm it."); armWindow(); return; }
+    if (mode === "setup2") {
+      if (str !== firstPass) { endUI("Those did not match. Start over from the knock."); return; }
+      const salt = newSalt();
+      store(PS, salt); store(PH, await hashOf(str, salt));
+      endUI("Both locks are set — on this device, by you alone.");
+      return;
+    }
+    const ok = (await hashOf(str, load(PS, ""))) === load(PH, "");
     if (ok) {
       sessionStorage.setItem(SES, "1");
       OP = "KRACKERJACK1134"; store("operator", OP);
@@ -448,11 +485,12 @@ boot();
       btn.querySelector(".arch-label").textContent = "THE ARCHITECT — IN";
       const who = document.getElementById("who"); if (who) who.textContent = "KRACKERJACK1134 · THE ARCHITECT";
       applyArchitect(true);
-      endListen("Welcome back, Architect.");
+      endUI("Welcome back, Architect.");
     } else {
-      endListen("Not it.");
+      endUI("Not it.");
     }
   }
+  padEl.addEventListener("click", e => { const b = e.target.closest("[data-arch]"); if (b) pressedPad(b.dataset.arch); });
   btn.addEventListener("click", () => {
     if (sessionStorage.getItem(SES) === "1") {
       sessionStorage.removeItem(SES);
@@ -461,24 +499,26 @@ boot();
       btn.querySelector(".arch-label").textContent = "THE ARCHITECT’S LOGIN";
       return;
     }
-    if (!listening) {
-      mode = load(HKEY, "") ? "login" : "setup1";
-      startListen();
-    }
+    if (!stage) { startStage(load(ACT, "") ? "pad" : "knock"); }
+    if (stage !== "knock") return;
     if (cur < 9) cur++;
     clearTimeout(gapTimer);
     gapTimer = setTimeout(closeSet, GAP);
   });
+  if (deactBtn) deactBtn.addEventListener("click", () => {
+    localStorage.removeItem("hive." + ACT);
+    endUI("Deactivated. On this device the button sleeps again — your knock wakes it.");
+  });
   fsBtn.addEventListener("click", () => {
     if (!fsArmed) {
       fsArmed = true;
-      fsBtn.textContent = "TAP AGAIN TO WIPE THIS DEVICE'S COMBINATION";
-      say("Fail safe: wiping clears the combination set on this device so a new one can be set. Your combination never leaves this browser; the Hive-core connect code becomes the anywhere fail safe when the core is live.");
+      fsBtn.textContent = "TAP AGAIN TO WIPE BOTH LOCKS ON THIS DEVICE";
+      say("Fail safe: wiping clears both locks set on this device so new ones can be set. Neither secret ever leaves this browser; the Hive-core connect code becomes the anywhere fail safe when the core is live.");
       return;
     }
-    localStorage.removeItem("hive." + HKEY); localStorage.removeItem("hive." + SKEY);
+    [PH, PS, KH, KS, ACT].forEach(k => localStorage.removeItem("hive." + k));
     sessionStorage.removeItem(SES);
-    endListen("Wiped. Click the button and set a new combination.");
+    endUI("Wiped. Click the button and set your locks again.");
   });
   if (sessionStorage.getItem(SES) === "1") {
     btn.classList.add("architect");
