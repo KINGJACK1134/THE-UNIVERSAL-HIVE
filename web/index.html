@@ -14,7 +14,7 @@
     :root { --ink:#101218; --moss:#C9A227; --paper:#f4f4f6; --line:rgba(255,255,255,.09); --card:#1a1d26;
             --warn:#C9A227; --live:#C9A227; --blood:#CC0000; --muted:#a7abb8; --rail:#16181f; --field:#14161d; }
     * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-    html,body { margin:0; height:100%; background:var(--ink); color:var(--paper);
+    html,body { margin:0; height:100%; overflow:hidden; background:var(--ink); color:var(--paper);
                 font:15px/1.55 "Segoe UI",system-ui,-apple-system,Arial,Helvetica,sans-serif; }
     button,input,select,textarea { font:inherit; color:inherit; }
     button { cursor:pointer; }
@@ -37,8 +37,11 @@
     .rail button.on { background:rgba(201,162,39,.14); color:var(--paper); border-color:rgba(201,162,39,.25); }
     .rail .foot { margin-top:auto; padding:12px 16px;
                   color:var(--muted); font-size:11px; }
+    /* Hide-until-populated: no empty shells on first paint. JS fills
+       #rail, #place and #rail-foot at boot; until then they stay hidden. */
+    #rail:empty, #place:empty, #rail-foot:empty { display:none; }
 
-    .main { display:flex; flex-direction:column; min-width:0; height:100dvh; }
+    .main { display:flex; flex-direction:column; min-width:0; height:100dvh; overflow-y:auto; -webkit-overflow-scrolling:touch; }
     .topbar { display:flex; gap:10px; align-items:center; padding:11px 14px;
               background:rgba(20,22,29,.96); box-shadow:0 2px 14px rgba(0,0,0,.45); position:sticky; top:0; z-index:5; }
     .topbar input.cmd { flex:1; background:var(--field); border:1px solid var(--line); border-radius:999px;
@@ -53,6 +56,8 @@
     .greet h2 { margin:6px 0 6px; font-size:22px; }
     .greet p { margin:0 0 14px; color:#d8dae2; font-size:14.5px; max-width:58ch; }
     .greet .sig { color:var(--muted); font-size:12px; margin-left:10px; }
+    .greet .mission { color:var(--moss); font-size:13px; letter-spacing:.1em; font-weight:700; margin:10px 0 0; }
+    .greet .origin { color:var(--muted); font-size:12px; margin-top:12px; }
     .seat { margin:16px 20px 0; background:var(--card); border:1px solid rgba(201,162,39,.42); border-radius:20px; padding:18px 20px; box-shadow:0 4px 16px rgba(0,0,0,.25); }
     .seat h2 { margin:0 0 6px; font-size:20px; }
     .seat p { margin:0 0 10px; color:#d8dae2; font-size:14.5px; max-width:65ch; }
@@ -62,9 +67,17 @@
     .seat .wall b { color:var(--paper); }
     .seat a.pri { display:inline-block; background:var(--moss); color:#0A0A0A; border-radius:999px; padding:11px 16px; font-weight:700; min-height:44px; text-decoration:none; margin:4px 8px 4px 0; }
     .seat a.gh2 { display:inline-block; background:transparent; border:1px solid var(--line); color:var(--paper); border-radius:999px; padding:11px 16px; min-height:44px; text-decoration:none; margin:4px 0; }
+    .cta-cards { display:flex; flex-wrap:wrap; gap:12px; margin:4px 0 0; }
+    .seat a.cta { display:flex; align-items:center; gap:12px; margin:0; padding:14px 18px; font-size:16px;
+                  border-radius:18px; box-shadow:0 6px 20px rgba(0,0,0,.35); }
+    .seat a.cta.pri { border:1px solid rgba(255,255,255,.25);
+                      box-shadow:0 0 0 1px rgba(201,162,39,.35), 0 8px 24px rgba(201,162,39,.22); }
+    .seat a.cta.gh2 { border:1px solid rgba(201,162,39,.55); background:rgba(201,162,39,.07); }
+    .seat a.cta .cta-ic { font-size:20px; line-height:1; flex:0 0 auto; }
+    .seat a.cta:hover { filter:brightness(1.08); }
     @media (max-width:720px) { .seat { margin:12px 14px 0; } }
     @media (max-width:720px) { .greet { margin:12px 14px 0; } }
-    .place { flex:1; overflow:auto; padding:20px; padding-bottom:84px; }
+    .place { flex:none; overflow:visible; padding:20px; padding-bottom:48px; }
     .place h2 { margin:0 0 4px; font-size:19px; }
     .place .sub { color:var(--muted); font-size:12.5px; margin-bottom:14px; }
     .cards { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:14px; }
@@ -165,23 +178,24 @@
       </div>
     </div>
     <nav id="rail"></nav>
-    <div class="foot" id="rail-foot">shell · loading…</div>
+    <div class="foot" id="rail-foot"></div>
   </aside>
   <div class="main">
     <div class="topbar">
       <span class="dot" id="dot"></span>
-      <input class="cmd" id="cmd" placeholder="search or launch anything — app, agent, tool, service  (press /)"/>
+      <input class="cmd" id="cmd" placeholder="talk to KRACKERJACK AI — ask me anything, open anything  (press Enter)"/>
       <span class="who" id="who"></span>
     </div>
     <div class="greet" id="greet">
       <div class="who-line">KRACKERJACK AI — THE ME IN DIGITAL FORM</div>
-      <h2>Welcome to the Hive.</h2>
-      <p>I'm KRACKERJACK AI, and this is THE UNIVERSAL HIVE — awake, out of the box, and open. It only needs you to want to do something; it doesn't matter if it's small or huge. Anything is possible, and nothing is out of reach unless you're not reaching for it.</p>
+      <div class="mission">Provide for all. Find the good. Never limit unnecessarily.</div>
+      <h2>One shell. Every app, agent, and tool — open from your phone.</h2>
+      <p>THE UNIVERSAL HIVE is a command shell for builders: open any Hive app right here, talk to any agent, run real tools, and keep your own data, memory, and workflows. It only needs you to want to do something; it doesn't matter if it's small or huge. Anything is possible, and nothing is out of reach unless you're not reaching for it.</p>
       <div>
         <button class="pri" id="greet-go">COME ON IN</button>
         <span class="sig">— KRACKERJACK AI</span>
       </div>
-      </div>
+      <div class="origin">Conceived and coded in 2011 · updated 2017 · named THE HIVE in 2025.</div>
     </div>
     <div class="seat" id="hive-seat">
       <h2>THE HIVE SEAT — Contributing Founder of THE UNIVERSAL HIVE</h2>
@@ -193,9 +207,9 @@
         <li>Anyone can also chip in any amount, any time, toward the Hive's actual posted costs.</li>
       </ul>
       <p class="honest">Honest label: this is an early founder-partner program and the benefits are still being built. No commissions, no referral payouts, no guaranteed customers are promised.</p>
-      <div>
-        <a class="pri" href="https://buy.stripe.com/dRm7sK2Ej6bfebEavr3oA1M" target="_blank" rel="noopener">Claim your Hive Seat — $49 + $19.99/mo</a>
-        <a class="gh2" href="https://buy.stripe.com/28EaEWa6L8jn4B4eLH3oA1N" target="_blank" rel="noopener">Chip in toward the bills — any amount</a>
+      <div class="cta-cards">
+        <a class="pri cta" href="https://buy.stripe.com/dRm7sK2Ej6bfebEavr3oA1M" target="_blank" rel="noopener"><span class="cta-ic">◆</span><span>Claim your Hive Seat — $49 + $19.99/mo</span></a>
+        <a class="gh2 cta" href="https://buy.stripe.com/28EaEWa6L8jn4B4eLH3oA1N" target="_blank" rel="noopener"><span class="cta-ic">✚</span><span>Chip in toward the bills — any amount</span></a>
       </div>
       <div class="wall"><b>Founders wall</b> — (First names go here as seats are claimed.)</div>
     </div>

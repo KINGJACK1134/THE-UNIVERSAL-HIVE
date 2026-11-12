@@ -35,6 +35,7 @@
     '#kj-row{display:flex;gap:8px;padding:12px;background:' + BG + ';border-top:1px solid rgba(201,162,39,.25)}',
     '#kj-in{flex:1;background:#232633;border:1px solid rgba(255,255,255,.12);border-radius:999px;color:' + INK + ';padding:11px 16px;font-size:14.5px;min-height:44px}',
     '#kj-send{background:' + GOLD + ';color:#111;border:0;border-radius:999px;padding:0 18px;font-weight:800;cursor:pointer;min-height:44px}',
+    '@media (max-width:700px){#kj-panel{right:0;bottom:0;width:100vw;height:100vh;height:100dvh;border-radius:0;border:0}#kj-thread{flex:1;overflow:auto}}',
     '#kj-note{font-size:11.5px;opacity:.6;padding:0 16px 10px;background:' + BG + '}'
   ].join('\n');
   var st = document.createElement('style'); st.textContent = css; document.head.appendChild(st);
@@ -160,7 +161,8 @@
     chip('What does it cost?', 'what does it cost');
     chip('Report a scammer', 'report a scammer');
   }
-  btn.onclick = function () { panel.classList.add('open'); btn.style.display = 'none'; greet(); input.focus(); };
+  window.KJ = { open: function (q) { panel.classList.add('open'); btn.style.display = 'none'; greet(); if (q) { ask(q); } input.focus(); } };
+  btn.onclick = function () { window.KJ.open(); };
   panel.querySelector('#kj-x').onclick = function () { panel.classList.remove('open'); btn.style.display = ''; };
   panel.querySelector('#kj-send').onclick = function () { var v = input.value.trim(); if (v) { input.value = ''; ask(v); } };
   input.addEventListener('keydown', function (e) { if (e.key === 'Enter') { panel.querySelector('#kj-send').click(); } });

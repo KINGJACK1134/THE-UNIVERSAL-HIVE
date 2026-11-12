@@ -59,24 +59,32 @@ function pHome() {
 
 function pApps() {
   const apps = MAN.apps.slice().sort((a, b) => (a.lane + a.id).localeCompare(b.lane + b.id));
-  $("#place").innerHTML = `<h2>Apps</h2><div class="sub">${apps.length} absorbed apps — each keeps its stack; OPEN runs it inside the shell.</div>
+  const hive = apps.filter(a => a.origin !== "museum");
+  const museum = apps.filter(a => a.origin === "museum");
+  $("#place").innerHTML = `<h2>Apps</h2><div class="sub">${hive.length} apps built by the Hive — each keeps its stack; OPEN runs it inside the shell.</div>
     <input id="app-q" placeholder="filter apps / lanes"/>
-    <div class="cards" id="app-list" style="margin-top:10px"></div>`;
-  const paint = q => {
-    const list = apps.filter(a => !q || (a.name + a.id + a.lane).toLowerCase().includes(q));
-    $("#app-list").innerHTML = list.map(a => `
+    <div class="cards" id="app-list" style="margin-top:10px"></div>
+    <h2 style="margin-top:34px">The Museum</h2><div class="sub">${museum.length} exhibits — built by the Architect on other platforms, preserved as they were. Nothing here is thrown away.</div>
+    <div class="cards" id="museum-list" style="margin-top:10px"></div>`;
+  const card = a => `
       <div class="card"><h3>${a.badge || ""}${a.name || a.id}</h3>
-        <p class="meta"><span class="badge ${a.built ? "live" : "app"}">${a.built ? "LIVE" : "BUILD"}</span>${a.lane} · ${a.id} · ${a.kind || "app"}</div>
+        <p class="meta"><span class="badge ${a.built ? "live" : "app"}">${a.built ? "LIVE" : "BUILD"}</span>${a.origin === "museum" ? '<span class="badge">EXHIBIT</span>' : ""}${a.lane} · ${a.id} · ${a.kind || "app"}</div>
       <div class="row"><button class="pri" data-open="${a.id}">OPEN</button>${a.source_repo ? `<button class="gh" data-repo="${a.source_repo}">REPO</button>` : ""}</div>
-      </div>`).join("") || "<div class='card'>no matches</div>";
+      </div>`;
+  const paint = q => {
+    const hit = a => !q || (a.name + a.id + a.lane).toLowerCase().includes(q);
+    $("#app-list").innerHTML = hive.filter(hit).map(card).join("") || "<div class='card'>no matches</div>";
+    $("#museum-list").innerHTML = museum.filter(hit).map(card).join("") || "<div class='card'>no matches</div>";
   };
   $("#app-q").oninput = e => paint(e.target.value.toLowerCase().trim());
   paint("");
-  $("#app-list").onclick = e => {
+  const onList = e => {
     const open = e.target.closest("[data-open]"), rep = e.target.closest("[data-repo]");
     if (open) { const a = apps.find(x => x.id === open.dataset.open); if (a) openApp(a); }
     if (rep) window.open(rep.dataset.repo, "_blank");
   };
+  $("#app-list").onclick = onList;
+  $("#museum-list").onclick = onList;
 }
 
 function pAgents() {
@@ -321,8 +329,8 @@ function renderPal() {
 async function boot() {
   if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").catch(() => {});
   $("#who").textContent = OP || "";
-  $("#cmd").onfocus = () => openPalette($("#cmd").value);
-  $("#cmd").oninput = () => openPalette($("#cmd").value);
+  $("#cmd").onfocus = () => { if (window.KJ) window.KJ.open(); };
+  $("#cmd").onkeydown = e => { if (e.key === "Enter") { const v = $("#cmd").value.trim(); $("#cmd").value = ""; if (window.KJ) window.KJ.open(v); } };
   $("#pal-in").oninput = renderPal;
   $("#pal-in").onkeydown = e => { if (e.key === "Enter") { const first = $("#pal-res button"); if (first) first.click(); } if (e.key === "Escape") $("#pal").classList.remove("open"); };
   $("#pal").onclick = e => { if (e.target.id === "pal") $("#pal").classList.remove("open"); };
