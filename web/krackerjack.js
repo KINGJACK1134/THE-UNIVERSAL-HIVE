@@ -158,7 +158,6 @@
     say('Welcome to the Hive. I\u2019m KRACKERJACK AI \u2014 I know every room in this place. Looking for an app, an agent, or something built?', 'ai');
     chip('Show me the apps', 'what apps are here');
     chip('Get something built', 'how do I get an app built');
-    chip('What does it cost?', 'what does it cost');
     chip('Report a scammer', 'report a scammer');
   }
   window.KJ = { open: function (q) { panel.classList.add('open'); btn.style.display = 'none'; greet(); if (q) { ask(q); } input.focus(); } };
